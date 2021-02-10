@@ -49,4 +49,14 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private Set<Mark> marks = new HashSet<>();
+
+    //== public methods
+    public void addStudent(Student student) {
+        this.students.add(student);
+    }
+
+    public void addMark(Mark mark) {
+        mark.setCourse(this);
+        this.marks.add(mark);
+    }
 }

@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -33,6 +34,8 @@ public class Mark {
     private Long id;
 
     private String name;
+
+    private LocalDateTime markDate;
 
     @ManyToOne
     @JoinColumn(name = "student_id")
