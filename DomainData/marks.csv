@@ -1,4 +1,4 @@
-﻿student_id,student_name,course_id,course_name,mark_id,mark,mark_date
+student_id,student_name,course_id,course_name,mark_id,mark,mark_date
 2,Petey Cruiser,1,Math,1,4.75,2019-10-12 00:00:00.000
 3,Anna Sthesia,1,Math,2,4.75,2020-02-26 00:00:00.000
 4,Mario Speedwagon,1,Math,3,4.75,2019-12-11 00:00:00.000

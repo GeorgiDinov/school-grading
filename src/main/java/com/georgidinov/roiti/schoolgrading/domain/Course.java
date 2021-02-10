@@ -1,5 +1,6 @@
 package com.georgidinov.roiti.schoolgrading.domain;
 
+import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"students", "marks"})
 @ToString(exclude = {"students", "marks"})
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,9 +37,11 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
+    @CsvBindByName(column = "course_id")
     private Long id;
 
     @Column(name = "course_name")
+    @CsvBindByName(column = "course_name")
     private String name;
 
     @ManyToMany
@@ -56,7 +59,6 @@ public class Course {
     }
 
     public void addMark(Mark mark) {
-        mark.setCourse(this);
         this.marks.add(mark);
     }
 }
