@@ -3,7 +3,6 @@ package com.georgidinov.roiti.schoolgrading.domain;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
-import com.opencsv.bean.CsvRecurse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -25,7 +24,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString(exclude = {"student", "course"})
+@ToString//(exclude = {"student", "course"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -50,24 +49,22 @@ public class Mark {
 
     @ManyToOne
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
-    @CsvRecurse
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
-    @CsvRecurse
     private Student student;
 
 
     //== public methods ==
-    public void setCourse(Course course) {
-        this.course = course;
-        this.course.addMark(this);
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-        this.student.addMark(this);
-    }
+//    public void setCourse(Course course) {
+//        this.course = course;
+//        this.course.addMark(this);
+//    }
+//
+//    public void setStudent(Student student) {
+//        this.student = student;
+//        this.student.addMark(this);
+//    }
 
 }
