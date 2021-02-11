@@ -48,11 +48,11 @@ public class Mark {
     @CsvDate("yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime markDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(name = "student_id")
     private Student student;
 
