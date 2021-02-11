@@ -14,9 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
@@ -25,39 +22,29 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = {"students", "marks"})
-@ToString(exclude = {"students", "marks"})
+@EqualsAndHashCode(exclude = {"marks"})
+@ToString(exclude = {"marks"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
+@Entity(name = "Course")
 @Table(name = "course")
 public class Course {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @CsvBindByName(column = "course_id")
     private Long id;
 
     @Column(name = "course_name")
     @CsvBindByName(column = "course_name")
-    private String name;
-
-    @ManyToMany
-    @JoinTable(name = "mark",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private Set<Student> students = new HashSet<>();
+    private String courseName;
 
     @OneToMany(mappedBy = "course")
     private Set<Mark> marks = new HashSet<>();
 
     //== public methods
-    public void addStudent(Student student) {
-        this.students.add(student);
-    }
-
     public void addMark(Mark mark) {
         this.marks.add(mark);
     }
