@@ -14,7 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
@@ -25,8 +24,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"marks", "courses"})
-@ToString(exclude = {"marks", "courses"})
+@EqualsAndHashCode(exclude = {"marks"})
+@ToString(exclude = {"marks"})
 @Builder
 @Entity(name = "Student")
 @Table(name = "student")
@@ -42,9 +41,6 @@ public class Student {
     @CsvBindByName(column = "student_name")
     private String studentName;
 
-    @ManyToMany(mappedBy = "students")
-    private Set<Course> courses = new HashSet<>();
-
     @OneToMany(mappedBy = "student")
     private Set<Mark> marks = new HashSet<>();
 
@@ -53,10 +49,4 @@ public class Student {
         mark.setStudent(this);
         this.marks.add(mark);
     }
-
-    public void addCourse(Course course) {
-        course.addStudent(this);
-        this.courses.add(course);
-    }
-
 }

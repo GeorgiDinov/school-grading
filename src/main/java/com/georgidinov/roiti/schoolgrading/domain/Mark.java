@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString//(exclude = {"student", "course"})
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -47,24 +48,12 @@ public class Mark {
     @CsvDate("yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime markDate;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_id")
     private Course course;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "student_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_id")
     private Student student;
-
-
-    //== public methods ==
-//    public void setCourse(Course course) {
-//        this.course = course;
-//        this.course.addMark(this);
-//    }
-//
-//    public void setStudent(Student student) {
-//        this.student = student;
-//        this.student.addMark(this);
-//    }
 
 }

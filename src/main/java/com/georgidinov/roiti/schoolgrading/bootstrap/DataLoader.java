@@ -3,9 +3,7 @@ package com.georgidinov.roiti.schoolgrading.bootstrap;
 import com.georgidinov.roiti.schoolgrading.domain.Course;
 import com.georgidinov.roiti.schoolgrading.domain.Mark;
 import com.georgidinov.roiti.schoolgrading.domain.Student;
-import com.georgidinov.roiti.schoolgrading.repository.CourseRepository;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
-import com.georgidinov.roiti.schoolgrading.repository.StudentRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -28,21 +26,12 @@ public class DataLoader implements CommandLineRunner {
 
     //== fields ==
     private final MarkRepository markRepository;
-    private final StudentRepository studentRepository;
-    private final CourseRepository courseRepository;
-
-    private Set<Mark> markSet = new HashSet<>();
-    private Set<Student> studentSet = new HashSet<>();
-    private Set<Course> courseSet = new HashSet<>();
+    private final Set<Mark> markSet = new HashSet<>();
 
     //== constructors ==
     @Autowired
-    public DataLoader(MarkRepository markRepository,
-                      StudentRepository studentRepository,
-                      CourseRepository courseRepository) {
+    public DataLoader(MarkRepository markRepository) {
         this.markRepository = markRepository;
-        this.studentRepository = studentRepository;
-        this.courseRepository = courseRepository;
     }
 
 
@@ -51,16 +40,13 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         List<MyBeanContainer> beanContainers = this.fetchData();
         this.processData(beanContainers);
-        log.info("Processed {} Marks", this.markSet.size());
-        log.info("Processed {} Courses", this.courseSet.size());
-        log.info("Processed {} Students", this.studentSet.size());
-        log.info("After relations...");
-        MyBeanContainer container = beanContainers.get(0);
-        log.info("Student = {}", container.getStudent());
-        log.info("Course = {}", container.getCourse());
-        log.info("Mark = {}", container.getMark());
+        log.info("Saving into database...");
+        this.markRepository.saveAll(markSet);
+        log.info("Saved...");
     }
 
+
+    //== private methods ==
     private List<MyBeanContainer> fetchData() {
         Path path = FileSystems.getDefault().getPath("DomainData/marks.csv");
         List<MyBeanContainer> beanContainers = new ArrayList<>();
@@ -68,10 +54,6 @@ public class DataLoader implements CommandLineRunner {
             beanContainers = new CsvToBeanBuilder<MyBeanContainer>(new CSVReader(Files.newBufferedReader(path)))
                     .withType(MyBeanContainer.class).build().parse();
             log.info("CSV file loaded successfully!");
-            MyBeanContainer container = beanContainers.get(0);
-            log.info("Student = {}", container.getStudent());
-            log.info("Course = {}", container.getCourse());
-            log.info("Mark = {}", container.getMark());
         } catch (IOException e) {
             System.out.println("Error reading csv file " + e.getMessage());
         }
@@ -80,9 +62,9 @@ public class DataLoader implements CommandLineRunner {
 
 
     private void processData(List<MyBeanContainer> beanContainers) {
-        log.info("processData() called...");
+        log.info("processing data relations...");
         beanContainers.forEach(this::createRelations);
-        log.info("createRelations complete...");
+        log.info("processing data relations complete...");
     }
 
     private void createRelations(MyBeanContainer beanContainer) {
@@ -90,13 +72,10 @@ public class DataLoader implements CommandLineRunner {
         Student student = beanContainer.getStudent();
         Course course = beanContainer.getCourse();
         //todo perform validations
-        student.addCourse(course);
         student.addMark(mark);
         course.addMark(mark);
 
         this.markSet.add(mark);
-        this.studentSet.add(student);
-        this.courseSet.add(course);
     }
 
 }
