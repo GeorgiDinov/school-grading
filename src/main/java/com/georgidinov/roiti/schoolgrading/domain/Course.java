@@ -19,6 +19,13 @@ import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.CSV_HEADER_COURSE_ID;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.CSV_HEADER_COURSE_NAME;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_COURSE_COLUMN_NAME_COURSE_ID;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_COURSE_COLUMN_NAME_COURSE_NAME;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_COURSE_TABLE_NAME;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_MAPPING_COURSE;
+
 
 @Getter
 @Setter
@@ -26,21 +33,24 @@ import java.util.Set;
 @ToString(exclude = {"marks"})
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Course")
-@Table(name = "course")
+@Entity
+@Table(name = ENTITY_COURSE_TABLE_NAME)
 public class Course {
 
     @Id
-    @Column(name = "course_id")
+    @Column(name = ENTITY_COURSE_COLUMN_NAME_COURSE_ID)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @CsvBindByName(column = "course_id")
+    @CsvBindByName(column = CSV_HEADER_COURSE_ID)
     private Long id;
 
-    @Column(name = "course_name")
-    @CsvBindByName(column = "course_name")
+    @Column(name = ENTITY_COURSE_COLUMN_NAME_COURSE_NAME)
+    @CsvBindByName(column = CSV_HEADER_COURSE_NAME)
     private String courseName;
 
-    @OneToMany(mappedBy = "course", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(
+            mappedBy = ENTITY_MAPPING_COURSE,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
     private Set<Mark> marks = new HashSet<>();
 
     //== public methods

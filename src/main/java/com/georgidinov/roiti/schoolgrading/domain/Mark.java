@@ -21,47 +21,49 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.*;
+
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Mark")
-@Table(name = "mark")
+@Entity
+@Table(name = ENTITY_MARK_TABLE_NAME)
 public class Mark {
 
     @Id
-    @Column(name = "mark_id")
+    @Column(name = ENTITY_MARK_COLUMN_NAME_MARK_ID)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @CsvBindByName(column = "mark_id")
+    @CsvBindByName(column = CSV_HEADER_MARK_ID)
     private Long id;
 
-    @Column(name = "mark")
-    @CsvBindByName(column = "mark")
+    @Column(name = ENTITY_MARK_COLUMN_NAME_MARK_NAME)
+    @CsvBindByName(column = CSV_HEADER_MARK_NAME)
     private Double mark;
 
-    @Column(name = "mark_date")
-    @CsvBindByName(column = "mark_date")
-    @CsvDate("yyyy-MM-dd HH:mm:ss.SSS")
+    @Column(name = ENTITY_MARK_COLUMN_NAME_MARK_DATE)
+    @CsvBindByName(column = CSV_HEADER_MARK_DATE)
+    @CsvDate(ENTITY_MARK_DATE_TIME_FORMAT)
     private LocalDateTime markDate;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = ENTITY_COURSE_COLUMN_NAME_COURSE_ID)
     private Course course;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = ENTITY_STUDENT_COLUMN_NAME_STUDENT_ID)
     private Student student;
 
     public void setCourse(Course course) {
         this.course = course;
-        course.addMark(this);
+        this.course.addMark(this);
     }
 
     public void setStudent(Student student) {
         this.student = student;
-        student.addMark(this);
+        this.student.addMark(this);
     }
 
 }

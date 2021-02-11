@@ -19,6 +19,13 @@ import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.CSV_HEADER_STUDENT_ID;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.CSV_HEADER_STUDENT_NAME;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_MAPPING_STUDENT;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_STUDENT_COLUMN_NAME_STUDENT_ID;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_STUDENT_COLUMN_NAME_STUDENT_NAME;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_STUDENT_TABLE_NAME;
+
 
 @Getter
 @Setter
@@ -26,21 +33,24 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"marks"})
 @ToString(exclude = {"marks"})
-@Entity(name = "Student")
-@Table(name = "student")
+@Entity
+@Table(name = ENTITY_STUDENT_TABLE_NAME)
 public class Student {
 
     @Id
-    @Column(name = "student_id")
+    @Column(name = ENTITY_STUDENT_COLUMN_NAME_STUDENT_ID)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @CsvBindByName(column = "student_id")
+    @CsvBindByName(column = CSV_HEADER_STUDENT_ID)
     private Long id;
 
-    @Column(name = "student_name")
-    @CsvBindByName(column = "student_name")
+    @Column(name = ENTITY_STUDENT_COLUMN_NAME_STUDENT_NAME)
+    @CsvBindByName(column = CSV_HEADER_STUDENT_NAME)
     private String studentName;
 
-    @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(
+            mappedBy = ENTITY_MAPPING_STUDENT,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
     private Set<Mark> marks = new HashSet<>();
 
     //== public methods ==
