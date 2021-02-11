@@ -54,21 +54,11 @@ public class DataLoader implements CommandLineRunner {
         log.info("Students = {}", studentSet.size());
         log.info("Courses = {}", courseSet.size());
         log.info("Marks = {}", markSet.size());
-        log.info("Saving into database...");
+        log.info("Saving data into database...");
         this.markRepository.saveAll(markSet);
         this.courseRepository.saveAll(courseSet);
         this.studentRepository.saveAll(studentSet);
-        log.info("Saved...");
-
-        log.info("Attempting delete operation on student");
-        this.studentRepository.deleteById(1L);
-
-        log.info("Attempting delete operation on course");
-        this.courseRepository.deleteById(1L);
-
-        log.info("Attempting delete operation on mark");
-        this.markRepository.deleteById(9L);
-
+        log.info("Data saved successfully...");
     }
 
 
@@ -98,8 +88,8 @@ public class DataLoader implements CommandLineRunner {
         Student student = beanContainer.getStudent();
         Course course = beanContainer.getCourse();
         //todo perform validations
-        student.addMark(mark);
-        course.addMark(mark);
+        mark.setCourse(course);
+        mark.setStudent(student);
 
         this.markSet.add(mark);
         this.studentSet.add(student);

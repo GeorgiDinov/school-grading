@@ -4,7 +4,6 @@ package com.georgidinov.roiti.schoolgrading.domain;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,6 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity(name = "Mark")
 @Table(name = "mark")
 public class Mark {
@@ -48,12 +46,22 @@ public class Mark {
     @CsvDate("yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime markDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "student_id")
     private Student student;
+
+    public void setCourse(Course course) {
+        this.course = course;
+        course.addMark(this);
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+        student.addMark(this);
+    }
 
 }

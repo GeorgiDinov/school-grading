@@ -2,7 +2,6 @@ package com.georgidinov.roiti.schoolgrading.domain;
 
 import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,6 @@ import java.util.Set;
 @ToString(exclude = {"marks"})
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity(name = "Course")
 @Table(name = "course")
 public class Course {
@@ -47,7 +45,6 @@ public class Course {
 
     //== public methods
     public void addMark(Mark mark) {
-        mark.setCourse(this);
         this.marks.add(mark);
     }
 }
