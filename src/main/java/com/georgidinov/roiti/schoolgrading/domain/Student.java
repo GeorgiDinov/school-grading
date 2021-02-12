@@ -45,7 +45,7 @@ public class Student {
 
     @Column(name = ENTITY_STUDENT_COLUMN_NAME_STUDENT_NAME)
     @CsvBindByName(column = CSV_HEADER_STUDENT_NAME)
-    private String studentName;
+    private String name;
 
     @OneToMany(
             mappedBy = ENTITY_MAPPING_STUDENT,
