@@ -26,6 +26,10 @@ public final class ApplicationConstants {
     public static final String ERROR_ENTITY_NAME_IS_EMPTY = "Entity Name Is Empty";
     public static final String ERROR_ENTITY_NAME_IS_BLANK = "Entity Name Is Blank";
 
+    public static final String ERROR_COURSE_NOT_FOUND = "Course with id = %d not found";
+    public static final String ERROR_MARK_NOT_FOUND = "Mark with id = %d not found";
+    public static final String ERROR_STUDENT_NOT_FOUND = "Student with id = %d not found";
+
     //== Mark Exception Messages
     public static final String ERROR_ENTITY_MARK_VALUE_IS_NOT_PRESENT = "Mark Value Is Null";
     public static final String ERROR_ENTITY_MARK_VALUE_IS_OUT_OF_BOUNDS_LESS = "Mark Value Is Less Than 2.00";

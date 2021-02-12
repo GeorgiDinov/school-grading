@@ -3,12 +3,15 @@ package com.georgidinov.roiti.schoolgrading.service;
 import com.georgidinov.roiti.schoolgrading.api.v1.mapper.MarkMapper;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkListDTO;
+import com.georgidinov.roiti.schoolgrading.exception.EntityNotFoundCustomException;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
+
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_MARK_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -42,6 +45,8 @@ public class MarkServiceImpl implements MarkService {
         log.info("MarkServiceImpl::findMarkById -> id passed = {}", id);
         return this.markRepository.findById(id)
                 .map(markMapper::markToMarkDTO)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundCustomException(
+                        String.format(ERROR_MARK_NOT_FOUND, id))
+                );
     }
 }

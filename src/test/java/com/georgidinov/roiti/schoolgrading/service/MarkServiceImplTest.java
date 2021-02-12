@@ -6,6 +6,7 @@ import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkListDTO;
 import com.georgidinov.roiti.schoolgrading.domain.Course;
 import com.georgidinov.roiti.schoolgrading.domain.Mark;
 import com.georgidinov.roiti.schoolgrading.domain.Student;
+import com.georgidinov.roiti.schoolgrading.exception.EntityNotFoundCustomException;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,9 +19,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_MARK_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -77,5 +81,23 @@ class MarkServiceImplTest {
                 () -> assertEquals(mark.getMark(), markDTO.getMark()),
                 () -> assertEquals(mark.getMarkDate(), markDTO.getDate())
         );
+    }
+
+    @Test
+    void findMarkByIdNotFound() {
+        //given
+        Long id = 1L;
+        when(this.markRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        //when
+        Exception exception = assertThrows(
+                EntityNotFoundCustomException.class,
+                () -> this.markService.findMarkById(id)
+        );
+        String exceptionMessage = exception.getMessage();
+        String expectedMessage = String.format(ERROR_MARK_NOT_FOUND, id);
+        //then
+        assertEquals(expectedMessage, exceptionMessage);
+        verify(this.markRepository).findById(anyLong());
     }
 }
