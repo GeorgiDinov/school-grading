@@ -5,7 +5,9 @@ import com.georgidinov.roiti.schoolgrading.api.v1.model.CourseDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.CourseListDTO;
 import com.georgidinov.roiti.schoolgrading.domain.Course;
 import com.georgidinov.roiti.schoolgrading.exception.EntityNotFoundCustomException;
+import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.repository.CourseRepository;
+import com.georgidinov.roiti.schoolgrading.validation.BaseNamedEntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,11 +18,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.COURSE_BASE_URL;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_COURSE_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,12 +34,15 @@ class CourseServiceImplTest {
     @Mock
     CourseRepository courseRepository;
 
+    @Mock
+    BaseNamedEntityValidator baseNamedEntityValidator;
+
     CourseService courseService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        courseService = new CourseServiceImpl(courseRepository, CourseMapper.INSTANCE);
+        courseService = new CourseServiceImpl(courseRepository, CourseMapper.INSTANCE, baseNamedEntityValidator);
     }
 
     @Test
@@ -91,4 +98,21 @@ class CourseServiceImplTest {
         verify(this.courseRepository).findById(anyLong());
     }
 
+
+    @Test
+    void saveCourse() throws EntityValidationException {
+        //given
+        Long id = 1L;
+        CourseDTO requestDTO = CourseDTO.builder().name("Computer Science").build();
+        CourseDTO expectedResponseDTO = CourseDTO.builder().name("Computer Science").courseUrl(COURSE_BASE_URL + "/" + id).build();
+        Course savedCourse = new Course(id, requestDTO.getName(), new HashSet<>());
+        when(this.courseRepository.save(any(Course.class))).thenReturn(savedCourse);
+        //when
+        CourseDTO savedDTO = this.courseService.saveCourse(requestDTO);
+
+        //then
+        assertNotNull(savedDTO);
+        assertEquals(expectedResponseDTO.getName(), savedDTO.getName());
+        assertEquals(expectedResponseDTO.getCourseUrl(), savedDTO.getCourseUrl());
+    }
 }

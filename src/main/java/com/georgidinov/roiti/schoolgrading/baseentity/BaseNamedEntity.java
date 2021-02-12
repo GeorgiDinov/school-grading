@@ -1,6 +1,6 @@
 package com.georgidinov.roiti.schoolgrading.baseentity;
 
-public interface BaseNamedEntity extends BaseEntity {
+public interface BaseNamedEntity {
 
     String getName();
 

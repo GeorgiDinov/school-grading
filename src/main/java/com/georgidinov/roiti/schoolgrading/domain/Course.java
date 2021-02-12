@@ -1,5 +1,6 @@
 package com.georgidinov.roiti.schoolgrading.domain;
 
+import com.georgidinov.roiti.schoolgrading.baseentity.BaseEntity;
 import com.georgidinov.roiti.schoolgrading.baseentity.BaseNamedEntity;
 import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTI
 @AllArgsConstructor
 @Entity
 @Table(name = ENTITY_COURSE_TABLE_NAME)
-public class Course implements BaseNamedEntity {
+public class Course implements BaseEntity, BaseNamedEntity {
 
     @Id
     @Column(name = ENTITY_COURSE_COLUMN_NAME_COURSE_ID)

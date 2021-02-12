@@ -7,6 +7,7 @@ import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.repository.CourseRepository;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
 import com.georgidinov.roiti.schoolgrading.repository.StudentRepository;
+import com.georgidinov.roiti.schoolgrading.validation.BaseEntityValidator;
 import com.georgidinov.roiti.schoolgrading.validation.BaseNamedEntityValidator;
 import com.georgidinov.roiti.schoolgrading.validation.MarkValidator;
 import com.opencsv.CSVReader;
@@ -35,6 +36,7 @@ public class DataLoader implements CommandLineRunner {
     private final StudentRepository studentRepository;
 
     private final MarkValidator markValidator;
+    private final BaseEntityValidator baseEntityValidator;
     private final BaseNamedEntityValidator baseNamedEntityValidator;
 
     private final Set<Mark> markSet = new HashSet<>();
@@ -47,11 +49,13 @@ public class DataLoader implements CommandLineRunner {
                       CourseRepository courseRepository,
                       StudentRepository studentRepository,
                       MarkValidator markValidator,
+                      BaseEntityValidator baseEntityValidator,
                       BaseNamedEntityValidator baseNamedEntityValidator) {
         this.markRepository = markRepository;
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
         this.markValidator = markValidator;
+        this.baseEntityValidator = baseEntityValidator;
         this.baseNamedEntityValidator = baseNamedEntityValidator;
     }
 
@@ -96,14 +100,11 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createRelations(MyBeanContainer beanContainer) throws EntityValidationException {
+        this.validateContainer(beanContainer);
+
         Mark mark = beanContainer.getMark();
-        this.markValidator.validate(mark);
-
         Student student = beanContainer.getStudent();
-        this.baseNamedEntityValidator.validate(student);
-
         Course course = beanContainer.getCourse();
-        this.baseNamedEntityValidator.validate(course);
 
         mark.setCourse(course);
         mark.setStudent(student);
@@ -111,6 +112,19 @@ public class DataLoader implements CommandLineRunner {
         this.markSet.add(mark);
         this.studentSet.add(student);
         this.courseSet.add(course);
+    }
+
+    private void validateContainer(MyBeanContainer container) throws EntityValidationException {
+        Mark mark = container.getMark();
+        this.markValidator.validate(mark);
+
+        Student student = container.getStudent();
+        this.baseEntityValidator.validate(student);
+        this.baseNamedEntityValidator.validate(student);
+
+        Course course = container.getCourse();
+        this.baseEntityValidator.validate(course);
+        this.baseNamedEntityValidator.validate(course);
     }
 
 }
