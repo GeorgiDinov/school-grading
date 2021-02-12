@@ -1,6 +1,7 @@
 package com.georgidinov.roiti.schoolgrading.domain;
 
 
+import com.georgidinov.roiti.schoolgrading.baseentity.BaseEntity;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.*;
 @AllArgsConstructor
 @Entity
 @Table(name = ENTITY_MARK_TABLE_NAME)
-public class Mark {
+public class Mark implements BaseEntity {
 
     @Id
     @Column(name = ENTITY_MARK_COLUMN_NAME_MARK_ID)
@@ -55,6 +56,12 @@ public class Mark {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = ENTITY_STUDENT_COLUMN_NAME_STUDENT_ID)
     private Student student;
+
+    //== public methods ==
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
     public void setCourse(Course course) {
         this.course = course;

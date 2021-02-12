@@ -3,9 +3,12 @@ package com.georgidinov.roiti.schoolgrading.bootstrap;
 import com.georgidinov.roiti.schoolgrading.domain.Course;
 import com.georgidinov.roiti.schoolgrading.domain.Mark;
 import com.georgidinov.roiti.schoolgrading.domain.Student;
+import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.repository.CourseRepository;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
 import com.georgidinov.roiti.schoolgrading.repository.StudentRepository;
+import com.georgidinov.roiti.schoolgrading.validation.BaseNamedEntityValidator;
+import com.georgidinov.roiti.schoolgrading.validation.MarkValidator;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +34,9 @@ public class DataLoader implements CommandLineRunner {
     private final CourseRepository courseRepository;
     private final StudentRepository studentRepository;
 
+    private final MarkValidator markValidator;
+    private final BaseNamedEntityValidator baseNamedEntityValidator;
+
     private final Set<Mark> markSet = new HashSet<>();
     private final Set<Student> studentSet = new HashSet<>();
     private final Set<Course> courseSet = new HashSet<>();
@@ -39,10 +45,14 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     public DataLoader(MarkRepository markRepository,
                       CourseRepository courseRepository,
-                      StudentRepository studentRepository) {
+                      StudentRepository studentRepository,
+                      MarkValidator markValidator,
+                      BaseNamedEntityValidator baseNamedEntityValidator) {
         this.markRepository = markRepository;
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
+        this.markValidator = markValidator;
+        this.baseNamedEntityValidator = baseNamedEntityValidator;
     }
 
 
@@ -77,17 +87,24 @@ public class DataLoader implements CommandLineRunner {
     }
 
 
-    private void processData(List<MyBeanContainer> beanContainers) {
-        log.info("processing data relations...");
-        beanContainers.forEach(this::createRelations);
-        log.info("processing data relations complete...");
+    private void processData(List<MyBeanContainer> beanContainers) throws EntityValidationException {
+        log.info("validating and processing data relations...");
+        for (MyBeanContainer beanContainer : beanContainers) {
+            createRelations(beanContainer);
+        }
+        log.info("processing data relations and validation complete...");
     }
 
-    private void createRelations(MyBeanContainer beanContainer) {
+    private void createRelations(MyBeanContainer beanContainer) throws EntityValidationException {
         Mark mark = beanContainer.getMark();
+        this.markValidator.validate(mark);
+
         Student student = beanContainer.getStudent();
+        this.baseNamedEntityValidator.validate(student);
+
         Course course = beanContainer.getCourse();
-        //todo perform validations
+        this.baseNamedEntityValidator.validate(course);
+
         mark.setCourse(course);
         mark.setStudent(student);
 

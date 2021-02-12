@@ -1,5 +1,6 @@
 package com.georgidinov.roiti.schoolgrading.domain;
 
+import com.georgidinov.roiti.schoolgrading.baseentity.BaseNamedEntity;
 import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -35,7 +36,7 @@ import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTI
 @ToString(exclude = {"marks"})
 @Entity
 @Table(name = ENTITY_STUDENT_TABLE_NAME)
-public class Student {
+public class Student implements BaseNamedEntity {
 
     @Id
     @Column(name = ENTITY_STUDENT_COLUMN_NAME_STUDENT_ID)
@@ -54,6 +55,16 @@ public class Student {
     private Set<Mark> marks = new HashSet<>();
 
     //== public methods ==
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
     public void addMark(Mark mark) {
         this.marks.add(mark);
     }
