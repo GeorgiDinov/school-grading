@@ -1,13 +1,16 @@
 package com.georgidinov.roiti.schoolgrading.service;
 
 import com.georgidinov.roiti.schoolgrading.api.v1.mapper.MarkMapper;
+import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkListDTO;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class MarkServiceImpl implements MarkService {
 
@@ -25,6 +28,7 @@ public class MarkServiceImpl implements MarkService {
 
     @Override
     public MarkListDTO findAllMarks() {
+        log.info("MarkServiceImp::findAllMarks");
         return new MarkListDTO(
                 this.markRepository.findAll()
                         .stream()
@@ -33,4 +37,11 @@ public class MarkServiceImpl implements MarkService {
         );
     }
 
+    @Override
+    public MarkDTO findMarkById(Long id) {
+        log.info("MarkServiceImpl::findMarkById -> id passed = {}", id);
+        return this.markRepository.findById(id)
+                .map(markMapper::markToMarkDTO)
+                .orElseThrow();
+    }
 }
