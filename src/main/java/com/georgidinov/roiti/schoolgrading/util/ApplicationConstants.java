@@ -47,6 +47,12 @@ public final class ApplicationConstants {
     public static final String CSV_HEADER_MARK_NAME = "mark";
     public static final String CSV_HEADER_MARK_DATE = "mark_date";
 
+    //End Point Mappings
+    public static final String API_V1 = "/api/v1";
+    public static final String MARK_BASE_URL = API_V1 + "/mark";
+    public static final String STUDENT_BASE_URL = API_V1 + "/student";
+    public static final String COURSE_BASE_URL = API_V1 + "/course";
+
     private ApplicationConstants() {
     }
 

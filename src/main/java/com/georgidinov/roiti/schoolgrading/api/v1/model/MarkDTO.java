@@ -1,6 +1,7 @@
 package com.georgidinov.roiti.schoolgrading.api.v1.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,11 @@ public class MarkDTO {
 
     private double mark;
     private LocalDateTime date;
+
+    @JsonProperty("student_name")
     private String studentName;
+
+    @JsonProperty("course_name")
     private String courseName;
 
 }

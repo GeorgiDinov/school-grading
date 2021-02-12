@@ -44,9 +44,9 @@ class CourseControllerTest {
     void findAllCourses() throws Exception {
         //given
         List<CourseDTO> courses = new ArrayList<>();
-        courses.add(new CourseDTO("Math"));
-        courses.add(new CourseDTO("Literature"));
-        courses.add(new CourseDTO("History"));
+        courses.add(CourseDTO.builder().name("Math").build());
+        courses.add(CourseDTO.builder().name("Literature").build());
+        courses.add(CourseDTO.builder().name("History").build());
         when(this.courseService.findAllCourses()).thenReturn(new CourseListDTO(courses));
 
         //when then
@@ -59,12 +59,12 @@ class CourseControllerTest {
     @Test
     void findCourseById() throws Exception {
         //given
-        CourseDTO courseDTO = new CourseDTO("Math");
+        CourseDTO courseDTO = CourseDTO.builder().name("Math").build();
         when(this.courseService.findCourseById(anyLong())).thenReturn(courseDTO);
 
         //when then
         mockMvc.perform(get("/api/v1/course/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo(courseDTO.getName())));
+                .andExpect(jsonPath("$.course_name", equalTo(courseDTO.getName())));
     }
 }

@@ -65,7 +65,7 @@ class MarkControllerTest {
         mockMvc.perform(get("/api/v1/mark/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.mark", equalTo(markDTO.getMark())))
-                .andExpect(jsonPath("$.studentName", equalTo(markDTO.getStudentName())))
-                .andExpect(jsonPath("$.courseName", equalTo(markDTO.getCourseName())));
+                .andExpect(jsonPath("$.student_name", equalTo(markDTO.getStudentName())))
+                .andExpect(jsonPath("$.course_name", equalTo(markDTO.getCourseName())));
     }
 }

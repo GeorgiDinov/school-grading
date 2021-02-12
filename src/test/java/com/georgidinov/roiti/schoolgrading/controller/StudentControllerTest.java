@@ -43,9 +43,9 @@ class StudentControllerTest {
     void findAllStudents() throws Exception {
         //given
         List<StudentDTO> students = new ArrayList<>();
-        students.add(new StudentDTO("John Doe"));
-        students.add(new StudentDTO("Anna Smith"));
-        students.add(new StudentDTO("Lisa James"));
+        students.add(StudentDTO.builder().name("John Doe").build());
+        students.add(StudentDTO.builder().name("Anna Smith").build());
+        students.add(StudentDTO.builder().name("Jane Jones").build());
         when(this.studentService.findAllStudents()).thenReturn(new StudentListDTO(students));
 
         //when then
@@ -57,12 +57,12 @@ class StudentControllerTest {
     @Test
     void findStudentById() throws Exception {
         //given
-        StudentDTO studentDTO = new StudentDTO("John Doe");
+        StudentDTO studentDTO = StudentDTO.builder().name("John Doe").build();
         when(this.studentService.findStudentById(anyLong())).thenReturn(studentDTO);
 
         //when then
         mockMvc.perform(get("/api/v1/student/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo(studentDTO.getName())));
+                .andExpect(jsonPath("$.student_name", equalTo(studentDTO.getName())));
     }
 }

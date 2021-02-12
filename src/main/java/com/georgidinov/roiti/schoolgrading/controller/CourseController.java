@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.COURSE_BASE_URL;
+
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/course")
+@RequestMapping(COURSE_BASE_URL)
 public class CourseController {
 
     //== fields ==
