@@ -51,7 +51,7 @@ class CourseServiceImplTest {
         CourseListDTO courseListDTO = this.courseService.findAllCourses();
 
         //then
-        assertEquals(courses.size(), courseListDTO.getCourseDTOS().size());
+        assertEquals(courses.size(), courseListDTO.getCourses().size());
         verify(courseRepository).findAll();
     }
 

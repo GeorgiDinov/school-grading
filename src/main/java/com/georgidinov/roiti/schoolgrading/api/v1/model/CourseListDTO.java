@@ -17,5 +17,5 @@ import java.util.List;
 @Builder
 @ToString
 public class CourseListDTO {
-    List<CourseDTO> courseDTOS;
+    List<CourseDTO> courses;
 }
