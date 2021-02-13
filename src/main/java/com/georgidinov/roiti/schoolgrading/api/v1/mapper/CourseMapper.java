@@ -15,7 +15,7 @@ public interface CourseMapper {
 
     default CourseDTO courseToCourseDTO(Course course) {
         return CourseDTO.builder()
-                .name(course.getName())
+                .name(course.getName())//replaceUnderscoresWithWhiteSpace(course.getName()))
                 .courseUrl(COURSE_BASE_URL + "/" + course.getId())
                 .build();
     }

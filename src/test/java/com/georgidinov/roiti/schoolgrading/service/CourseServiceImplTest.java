@@ -115,4 +115,29 @@ class CourseServiceImplTest {
         assertEquals(expectedResponseDTO.getName(), responseDTO.getName());
         assertEquals(expectedResponseDTO.getCourseUrl(), responseDTO.getCourseUrl());
     }
+
+    @Test
+    void updateCourse() throws EntityValidationException {
+        //given
+        Long id = 1L;
+        Course course = new Course(id, "Computer Science", new HashSet<>());
+        CourseDTO requestDTO = CourseDTO.builder().name("Computer Science Updated").build();
+        CourseDTO expectedResponseDTO = CourseDTO.builder().name(requestDTO.getName()).courseUrl(COURSE_BASE_URL + "/" + id).build();
+
+        when(this.courseRepository.findById(anyLong())).thenReturn(Optional.of(course));
+        when(this.courseRepository.save(any(Course.class))).thenReturn(course);
+        //when
+        CourseDTO responseDTO = this.courseService.updateCourse(id, requestDTO);
+
+        //then
+        assertNotNull(responseDTO);
+        assertEquals(expectedResponseDTO.getName(), responseDTO.getName());
+        assertEquals(expectedResponseDTO.getCourseUrl(), responseDTO.getCourseUrl());
+    }
+
+    @Test
+    void deleteCourseById() {
+        this.courseService.deleteCourseById(anyLong());
+        verify(courseRepository).deleteById(anyLong());
+    }
 }

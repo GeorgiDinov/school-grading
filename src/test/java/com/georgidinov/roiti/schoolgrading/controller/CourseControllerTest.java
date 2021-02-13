@@ -20,9 +20,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,5 +89,31 @@ class CourseControllerTest extends AbstractRestControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.course_name", equalTo(expectedResponseDTO.getName())))
                 .andExpect(jsonPath("$.course_url", equalTo(expectedResponseDTO.getCourseUrl())));
+    }
+
+    @Test
+    void updateCourse() throws Exception {
+        //given
+        long id = 1L;
+        CourseDTO requestDTO = CourseDTO.builder().name("Computer Science Updated").build();
+        CourseDTO expectedResponseDTO = CourseDTO.builder().name("Computer Science Updated").courseUrl(COURSE_BASE_URL + "/" + id).build();
+
+        when(this.courseService.updateCourse(anyLong(), any(CourseDTO.class))).thenReturn(expectedResponseDTO);
+
+        //when then
+        mockMvc.perform(put(COURSE_BASE_URL + "/" + id).contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(requestDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.course_name", equalTo(expectedResponseDTO.getName())))
+                .andExpect(jsonPath("$.course_url", equalTo(expectedResponseDTO.getCourseUrl())));
+    }
+
+
+    @Test
+    void deleteCourseById() throws Exception {
+        mockMvc.perform(delete(COURSE_BASE_URL + "/" + 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(this.courseService).deleteCourseById(anyLong());
     }
 }

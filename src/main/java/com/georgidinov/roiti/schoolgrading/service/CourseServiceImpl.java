@@ -66,6 +66,28 @@ public class CourseServiceImpl implements CourseService {
         return this.saveCourseToDatabase(this.courseMapper.courseDTOToCourse(courseDTO));
     }
 
+    @Override
+    public CourseDTO updateCourse(Long id, CourseDTO courseDTO) throws EntityValidationException {
+        log.info("CourseService::updateCourse -> course DTO passed  = {}", courseDTO);
+        this.baseNamedEntityValidator.validate(courseDTO);
+        if (isCourseWithNameExist(courseDTO)) {
+            throw new RuntimeException("Course exists");// todo custom exception
+        }
+        Course course = this.courseRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundCustomException(
+                        String.format(ERROR_COURSE_NOT_FOUND, id))
+        );
+        course.setName(courseDTO.getName());
+        return this.saveCourseToDatabase(course);
+    }
+
+    @Override
+    public void deleteCourseById(Long id) {
+        log.info("CourseService::deleteCourseById -> id passed = {}", id);
+        this.courseRepository.deleteById(id);
+    }
+
+    //todo implement patch
 
     //== private methods ==
     private CourseDTO saveCourseToDatabase(Course course) {
@@ -74,7 +96,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private boolean isCourseWithNameExist(CourseDTO courseDTO) {
-        Optional<Course> optionalCourse = this.courseRepository.findCourseByName(courseDTO.getName());
+        Optional<Course> optionalCourse = this.courseRepository.findCourseByNameIs(courseDTO.getName());
         return optionalCourse.isPresent();
     }
 }

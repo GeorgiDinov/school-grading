@@ -12,4 +12,8 @@ public interface CourseService {
 
     CourseDTO saveCourse(CourseDTO courseDTO) throws EntityValidationException;
 
+    CourseDTO updateCourse(Long id, CourseDTO courseDTO) throws EntityValidationException;
+
+    void deleteCourseById(Long id);
+
 }
