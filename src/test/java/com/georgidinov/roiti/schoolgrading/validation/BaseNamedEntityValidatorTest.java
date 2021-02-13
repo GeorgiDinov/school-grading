@@ -8,9 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
 import java.util.stream.Stream;
@@ -24,15 +21,12 @@ import static org.junit.jupiter.params.ParameterizedTest.ARGUMENTS_PLACEHOLDER;
 
 class BaseNamedEntityValidatorTest {
 
-    @Mock
-    BaseEntityValidator baseEntityValidator;
 
-    @InjectMocks
     BaseNamedEntityValidator baseNamedEntityValidator;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        baseNamedEntityValidator = new BaseNamedEntityValidator();
     }
 
     @Test
@@ -61,6 +55,5 @@ class BaseNamedEntityValidatorTest {
                 Arguments.of(new Course(3L, " ", new HashSet<>()), ERROR_ENTITY_NAME_IS_BLANK)
         );
     }
-
 
 }

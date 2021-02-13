@@ -15,16 +15,19 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.COURSE_BASE_URL;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-class CourseControllerTest {
+class CourseControllerTest extends AbstractRestControllerTest {
 
     @Mock
     CourseService courseService;
@@ -66,5 +69,22 @@ class CourseControllerTest {
         mockMvc.perform(get("/api/v1/course/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.course_name", equalTo(courseDTO.getName())));
+    }
+
+    @Test
+    void saveCourse() throws Exception {
+        //given
+        long id = 1L;
+        CourseDTO requestDTO = CourseDTO.builder().name("Computer Science").build();
+        CourseDTO expectedResponseDTO = CourseDTO.builder().name("Computer Science").courseUrl(COURSE_BASE_URL + "/" + id).build();
+
+        when(this.courseService.saveCourse(any(CourseDTO.class))).thenReturn(expectedResponseDTO);
+
+        //when then
+        mockMvc.perform(post(COURSE_BASE_URL).contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(requestDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.course_name", equalTo(expectedResponseDTO.getName())))
+                .andExpect(jsonPath("$.course_url", equalTo(expectedResponseDTO.getCourseUrl())));
     }
 }

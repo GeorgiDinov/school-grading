@@ -51,5 +51,4 @@ public class CourseController {
         return this.courseService.saveCourse(courseDTO);
     }
 
-
 }

@@ -108,11 +108,11 @@ class CourseServiceImplTest {
         Course savedCourse = new Course(id, requestDTO.getName(), new HashSet<>());
         when(this.courseRepository.save(any(Course.class))).thenReturn(savedCourse);
         //when
-        CourseDTO savedDTO = this.courseService.saveCourse(requestDTO);
+        CourseDTO responseDTO = this.courseService.saveCourse(requestDTO);
 
         //then
-        assertNotNull(savedDTO);
-        assertEquals(expectedResponseDTO.getName(), savedDTO.getName());
-        assertEquals(expectedResponseDTO.getCourseUrl(), savedDTO.getCourseUrl());
+        assertNotNull(responseDTO);
+        assertEquals(expectedResponseDTO.getName(), responseDTO.getName());
+        assertEquals(expectedResponseDTO.getCourseUrl(), responseDTO.getCourseUrl());
     }
 }
