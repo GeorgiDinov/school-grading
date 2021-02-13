@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,12 +18,15 @@ import java.time.LocalDateTime;
 public class MarkDTO {
 
     private double mark;
-    private LocalDateTime date;
+    private String date;
 
     @JsonProperty("student_name")
     private String studentName;
 
     @JsonProperty("course_name")
     private String courseName;
+
+    @JsonProperty("mark_url")
+    private String markUrl;
 
 }

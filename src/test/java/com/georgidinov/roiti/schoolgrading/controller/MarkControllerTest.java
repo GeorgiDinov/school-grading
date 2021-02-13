@@ -44,9 +44,9 @@ class MarkControllerTest {
     void findAllMarks() throws Exception {
         //given
         List<MarkDTO> marks = new ArrayList<>();
-        marks.add(new MarkDTO(5.00d, LocalDateTime.now(), "Student Test Name", "Math"));
-        marks.add(new MarkDTO(5.00d, LocalDateTime.now(), "Student Test Name1", "Literature"));
-        marks.add(new MarkDTO(2.00d, LocalDateTime.now(), "Student Test Name2", "History"));
+        marks.add(new MarkDTO(5.00d, LocalDateTime.now().toString(), "Student Test Name", "Math",""));
+        marks.add(new MarkDTO(5.00d, LocalDateTime.now().toString(), "Student Test Name1", "Literature",""));
+        marks.add(new MarkDTO(2.00d, LocalDateTime.now().toString(), "Student Test Name2", "History",""));
         when(this.markService.findAllMarks()).thenReturn(new MarkListDTO(marks));
 
         //when then
@@ -58,7 +58,7 @@ class MarkControllerTest {
     @Test
     void findMarkById() throws Exception {
         //given
-        MarkDTO markDTO = new MarkDTO(5.00d, LocalDateTime.now(), "John Doe", "Math");
+        MarkDTO markDTO = new MarkDTO(5.00d, LocalDateTime.now().toString(), "John Doe", "Math","");
         when(this.markService.findMarkById(anyLong())).thenReturn(markDTO);
 
         //when then

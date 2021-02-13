@@ -7,18 +7,23 @@ import com.georgidinov.roiti.schoolgrading.domain.Course;
 import com.georgidinov.roiti.schoolgrading.domain.Mark;
 import com.georgidinov.roiti.schoolgrading.domain.Student;
 import com.georgidinov.roiti.schoolgrading.exception.EntityNotFoundCustomException;
+import com.georgidinov.roiti.schoolgrading.repository.CourseRepository;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
+import com.georgidinov.roiti.schoolgrading.repository.StudentRepository;
+import com.georgidinov.roiti.schoolgrading.validation.BaseNamedEntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_MARK_DATE_TIME_FORMAT;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_MARK_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,13 +38,24 @@ class MarkServiceImplTest {
     @Mock
     MarkRepository markRepository;
 
+    @Mock
+    CourseRepository courseRepository;
+
+    @Mock
+    StudentRepository studentRepository;
+
+    @Mock
+    BaseNamedEntityValidator baseNamedEntityValidator;
+
     MarkService markService;
 
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.markService = new MarkServiceImpl(markRepository, MarkMapper.INSTANCE);
+        this.markService =
+                new MarkServiceImpl(markRepository, courseRepository,
+                        studentRepository, baseNamedEntityValidator, MarkMapper.INSTANCE);
     }
 
     @Test
@@ -64,6 +80,7 @@ class MarkServiceImplTest {
     @Test
     void findMarkById() {
         //given
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(ENTITY_MARK_DATE_TIME_FORMAT);
         Course course = new Course(1L, "TestCourseOne", new HashSet<>());
         Student student = new Student(1L, "TestStudentOne", new HashSet<>());
         Mark mark = new Mark(1L, 5.00d, LocalDateTime.now(), course, student);
@@ -79,7 +96,7 @@ class MarkServiceImplTest {
                 () -> assertEquals(course.getName(), markDTO.getCourseName()),
                 () -> assertEquals(student.getName(), markDTO.getStudentName()),
                 () -> assertEquals(mark.getMark(), markDTO.getMark()),
-                () -> assertEquals(mark.getMarkDate(), markDTO.getDate())
+                () -> assertEquals(mark.getMarkDate().format(dtf), markDTO.getDate())
         );
     }
 

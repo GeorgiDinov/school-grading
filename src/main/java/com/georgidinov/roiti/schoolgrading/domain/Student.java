@@ -4,7 +4,6 @@ import com.georgidinov.roiti.schoolgrading.baseentity.BaseEntity;
 import com.georgidinov.roiti.schoolgrading.baseentity.BaseNamedEntity;
 import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,11 +32,11 @@ import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTI
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"marks"})
 @ToString(exclude = {"marks"})
 @Entity
 @Table(name = ENTITY_STUDENT_TABLE_NAME)
 public class Student implements BaseEntity, BaseNamedEntity {
+
 
     @Id
     @Column(name = ENTITY_STUDENT_COLUMN_NAME_STUDENT_ID)
@@ -68,5 +67,28 @@ public class Student implements BaseEntity, BaseNamedEntity {
 
     public void addMark(Mark mark) {
         this.marks.add(mark);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Student student = (Student) o;
+
+        if (name.equals(student.name)) {
+            return true;
+        }
+        return id.equals(student.id);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
     }
 }
