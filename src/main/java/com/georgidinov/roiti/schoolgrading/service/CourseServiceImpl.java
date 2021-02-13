@@ -96,7 +96,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private boolean isCourseWithNameExist(CourseDTO courseDTO) {
-        Optional<Course> optionalCourse = this.courseRepository.findCourseByNameIs(courseDTO.getName());
+        Optional<Course> optionalCourse = this.courseRepository.findCourseByName(courseDTO.getName());
         return optionalCourse.isPresent();
     }
 }

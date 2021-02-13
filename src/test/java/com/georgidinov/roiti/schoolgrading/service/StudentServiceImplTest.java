@@ -5,7 +5,9 @@ import com.georgidinov.roiti.schoolgrading.api.v1.model.StudentDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.StudentListDTO;
 import com.georgidinov.roiti.schoolgrading.domain.Student;
 import com.georgidinov.roiti.schoolgrading.exception.EntityNotFoundCustomException;
+import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.repository.StudentRepository;
+import com.georgidinov.roiti.schoolgrading.validation.BaseNamedEntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,10 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_STUDENT_NOT_FOUND;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.STUDENT_BASE_URL;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,12 +34,15 @@ class StudentServiceImplTest {
     @Mock
     StudentRepository studentRepository;
 
+    @Mock
+    BaseNamedEntityValidator baseNamedEntityValidator;
+
     StudentService studentService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.studentService = new StudentServiceImpl(this.studentRepository, StudentMapper.INSTANCE);
+        this.studentService = new StudentServiceImpl(this.studentRepository, StudentMapper.INSTANCE, baseNamedEntityValidator);
     }
 
     @Test
@@ -88,5 +95,49 @@ class StudentServiceImplTest {
         String expectedMessage = String.format(ERROR_STUDENT_NOT_FOUND, id);
         assertEquals(expectedMessage, exceptionMessage);
         verify(this.studentRepository).findById(anyLong());
+    }
+
+    @Test
+    void saveStudent() throws EntityValidationException {
+        //given
+        StudentDTO requestDTO = StudentDTO.builder().name("John Doe").build();
+        StudentDTO expectedResponseDTO = StudentDTO.builder()
+                .name("John Doe").studentUrl(STUDENT_BASE_URL + "/" + 1).build();
+        Student student = new Student(1L, "John Doe", new HashSet<>());
+        when(this.studentRepository.save(any(Student.class))).thenReturn(student);
+
+        //when
+        StudentDTO responseDTO = this.studentService.saveStudent(requestDTO);
+
+        //then
+        assertNotNull(responseDTO);
+        assertEquals(expectedResponseDTO.getName(), responseDTO.getName());
+        assertEquals(expectedResponseDTO.getStudentUrl(), responseDTO.getStudentUrl());
+    }
+
+    @Test
+    void updateStudent() throws EntityValidationException {
+        //given
+        Student student = new Student(1L, "John Doe", new HashSet<>());
+        StudentDTO requestDTO = StudentDTO.builder().name("John Doe Updated").build();
+        StudentDTO expectedResponseDTO = StudentDTO.builder()
+                .name("John Doe Updated").studentUrl(STUDENT_BASE_URL + "/" + 1).build();
+
+        when(this.studentRepository.findById(anyLong())).thenReturn(Optional.of(student));
+        when(this.studentRepository.save(any(Student.class))).thenReturn(student);
+
+        //when
+        StudentDTO responseDTO = this.studentService.updateStudent(1L, requestDTO);
+
+        //then
+        assertNotNull(responseDTO);
+        assertEquals(expectedResponseDTO.getName(), responseDTO.getName());
+        assertEquals(expectedResponseDTO.getStudentUrl(), responseDTO.getStudentUrl());
+    }
+
+    @Test
+    void deleteStudentById() {
+        this.studentService.deleteStudentById(anyLong());
+        verify(studentRepository).deleteById(anyLong());
     }
 }
