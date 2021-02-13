@@ -8,6 +8,7 @@ import com.georgidinov.roiti.schoolgrading.service.MarkService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,11 +63,12 @@ public class MarkController {
         return this.markService.updateMark(Long.valueOf(id), markDTO);
     }
 
+    @Async
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteMarkById(@PathVariable String id) {
         log.info("MarkController::deleteMarkById -> id passed = {}", id);
         this.markService.deleteMarkById(Long.valueOf(id));
     }
-
 
 }

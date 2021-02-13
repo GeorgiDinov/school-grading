@@ -92,6 +92,11 @@ public class MarkServiceImpl implements MarkService {
 
     @Override
     public void deleteMarkById(Long id) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            log.info("Thread was interrupted {}", e.getMessage());
+        }
         log.info("MarkServiceImpl::deleteMarkById -> id passed = {}", id);
         this.markRepository.deleteById(id);
     }
