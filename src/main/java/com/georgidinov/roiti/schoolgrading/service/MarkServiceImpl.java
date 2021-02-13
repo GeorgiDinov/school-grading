@@ -90,6 +90,12 @@ public class MarkServiceImpl implements MarkService {
         return this.saveMarkToDatabase(mark);
     }
 
+    @Override
+    public void deleteMarkById(Long id) {
+        log.info("MarkServiceImpl::deleteMarkById -> id passed = {}", id);
+        this.markRepository.deleteById(id);
+    }
+
     //== private methods ==
     private MarkDTO saveMarkToDatabase(Mark mark) {
         Mark savedMark = this.markRepository.save(mark);

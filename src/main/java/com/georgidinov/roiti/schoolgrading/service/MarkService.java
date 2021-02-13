@@ -14,4 +14,6 @@ public interface MarkService {
 
     MarkDTO updateMark(Long id, MarkDTO markDTO) throws EntityValidationException;
 
+    void deleteMarkById(Long id);
+
 }
