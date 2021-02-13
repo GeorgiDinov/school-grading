@@ -8,4 +8,7 @@ import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 public interface ReportService {
 
     ReportDTO avgMarkForStudentInSingleCourse(Long studentId, CourseDTO courseDTO) throws EntityValidationException;
+
+    ReportDTO avgMarkForStudentInAllCourses(Long studentId) throws EntityValidationException;
+
 }

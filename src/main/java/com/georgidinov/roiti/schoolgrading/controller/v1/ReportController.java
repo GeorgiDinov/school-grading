@@ -31,12 +31,20 @@ public class ReportController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/avg/course/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReportDTO getReport(@PathVariable String id,
-                               @RequestBody CourseDTO courseDTO) throws EntityValidationException {
-        log.info("ReportController::getReport -> studentId passed = {}, courseDTO passed = {}", id, courseDTO);
+    public ReportDTO getAverageMarkForSingleCourse(@PathVariable String id,
+                                                   @RequestBody CourseDTO courseDTO) throws EntityValidationException {
+        log.info("ReportController::getAverageMarkForSingleCourse -> studentId passed = {}, courseDTO passed = {}", id, courseDTO);
         return this.reportService.avgMarkForStudentInSingleCourse(Long.valueOf(id), courseDTO);
+    }
+
+
+    @GetMapping("/avg/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ReportDTO getAverageMarkForAllCourses(@PathVariable String id) throws EntityValidationException {
+        log.info("ReportController::getAverageMarkForAllCourses -> studentId passed = {}", id);
+        return this.reportService.avgMarkForStudentInAllCourses(Long.valueOf(id));
     }
 
 }

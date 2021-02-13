@@ -11,6 +11,10 @@ public interface MarkRepository extends JpaRepository<Mark, Long> {
 
     @Query("SELECT AVG(mark) FROM Mark WHERE course.name = :courseName AND student.id = :studentId")
     Double avgMarkForStudentInSingleCourse(@Param("studentId") Long studentId,
-                                         @Param("courseName") String courseName);
+                                           @Param("courseName") String courseName);
+
+
+    @Query("SELECT AVG(mark) FROM Mark WHERE student.id = :studentId")
+    Double avgMarkForStudentInAllCourses(@Param("studentId") Long studentId);
 
 }

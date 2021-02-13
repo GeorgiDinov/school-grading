@@ -41,9 +41,14 @@ public class ReportServiceImpl implements ReportService {
         validateStudentId(studentId);
         validateCourseDTO(courseDTO);
         Double result = markRepository.avgMarkForStudentInSingleCourse(studentId, courseDTO.getName());
-        log.info("Result = {}", result);
-        String reportData = String.format("Average Mark For %s = %.2f", courseDTO.getName(), result);
-        return new ReportDTO(reportData);
+        return reportBuilder(result);
+    }
+
+    public ReportDTO avgMarkForStudentInAllCourses(Long studentId) throws EntityValidationException {
+        log.info("ReportService::avgMarkForStudentInAllCourses -> studentId passed = {}", studentId);
+        validateStudentId(studentId);
+        Double result = this.markRepository.avgMarkForStudentInAllCourses(studentId);
+        return reportBuilder(result);
     }
 
 
@@ -58,6 +63,12 @@ public class ReportServiceImpl implements ReportService {
         if (!this.studentRepository.existsById(studentId)) {
             throw new EntityValidationException(String.format(ERROR_STUDENT_NOT_FOUND, studentId));
         }
+    }
+
+    private ReportDTO reportBuilder(Double result) {
+        log.info("Result = {}", result);
+        String reportData = String.format("Average Result = %.2f", result);
+        return new ReportDTO(reportData);
     }
 
 }
