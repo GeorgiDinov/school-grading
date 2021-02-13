@@ -2,6 +2,7 @@ package com.georgidinov.roiti.schoolgrading.controller;
 
 import com.georgidinov.roiti.schoolgrading.api.v1.model.CourseDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.CourseListDTO;
+import com.georgidinov.roiti.schoolgrading.controller.v1.CourseController;
 import com.georgidinov.roiti.schoolgrading.service.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

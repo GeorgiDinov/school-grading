@@ -2,6 +2,7 @@ package com.georgidinov.roiti.schoolgrading.controller;
 
 import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkListDTO;
+import com.georgidinov.roiti.schoolgrading.controller.v1.MarkController;
 import com.georgidinov.roiti.schoolgrading.service.MarkService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

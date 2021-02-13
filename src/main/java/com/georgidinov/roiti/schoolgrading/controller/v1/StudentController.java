@@ -1,4 +1,4 @@
-package com.georgidinov.roiti.schoolgrading.controller;
+package com.georgidinov.roiti.schoolgrading.controller.v1;
 
 
 import com.georgidinov.roiti.schoolgrading.api.v1.model.StudentDTO;

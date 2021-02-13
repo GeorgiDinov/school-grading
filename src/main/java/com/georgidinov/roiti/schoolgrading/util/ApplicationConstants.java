@@ -52,6 +52,7 @@ public final class ApplicationConstants {
     public static final String MARK_BASE_URL = API_V1 + "/mark";
     public static final String STUDENT_BASE_URL = API_V1 + "/student";
     public static final String COURSE_BASE_URL = API_V1 + "/course";
+    public static final String REPORT_BASE_URL = API_V1 + "/report";
 
     private ApplicationConstants() {
     }
