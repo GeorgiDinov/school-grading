@@ -2,11 +2,13 @@ package com.georgidinov.roiti.schoolgrading.bootstrap;
 
 import com.georgidinov.roiti.schoolgrading.domain.Course;
 import com.georgidinov.roiti.schoolgrading.domain.Mark;
+import com.georgidinov.roiti.schoolgrading.domain.SchoolUserCredentials;
 import com.georgidinov.roiti.schoolgrading.domain.Student;
 import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.repository.CourseRepository;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
 import com.georgidinov.roiti.schoolgrading.repository.StudentRepository;
+import com.georgidinov.roiti.schoolgrading.security.role.SchoolUserRole;
 import com.georgidinov.roiti.schoolgrading.validation.BaseEntityValidator;
 import com.georgidinov.roiti.schoolgrading.validation.BaseNamedEntityValidator;
 import com.georgidinov.roiti.schoolgrading.validation.MarkValidator;
@@ -15,6 +17,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,6 +29,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.georgidinov.roiti.schoolgrading.security.role.SchoolUserRole.ADMIN;
+import static com.georgidinov.roiti.schoolgrading.security.role.SchoolUserRole.USER;
+
 @Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -34,6 +40,8 @@ public class DataLoader implements CommandLineRunner {
     private final MarkRepository markRepository;
     private final CourseRepository courseRepository;
     private final StudentRepository studentRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     private final MarkValidator markValidator;
     private final BaseEntityValidator baseEntityValidator;
@@ -48,12 +56,13 @@ public class DataLoader implements CommandLineRunner {
     public DataLoader(MarkRepository markRepository,
                       CourseRepository courseRepository,
                       StudentRepository studentRepository,
-                      MarkValidator markValidator,
+                      PasswordEncoder passwordEncoder, MarkValidator markValidator,
                       BaseEntityValidator baseEntityValidator,
                       BaseNamedEntityValidator baseNamedEntityValidator) {
         this.markRepository = markRepository;
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
+        this.passwordEncoder = passwordEncoder;
         this.markValidator = markValidator;
         this.baseEntityValidator = baseEntityValidator;
         this.baseNamedEntityValidator = baseNamedEntityValidator;
@@ -73,6 +82,14 @@ public class DataLoader implements CommandLineRunner {
         this.courseRepository.saveAll(courseSet);
         this.studentRepository.saveAll(studentSet);
         log.info("Data saved successfully...");
+
+        log.info("Adding some credentials...");
+        for (long i = 1; i < 5; i++) {
+            SchoolUserRole role = (i % 2 != 0) ? USER : ADMIN;
+            Student student = this.studentRepository.findById(i).orElseThrow();
+            this.addCredentials(student, role);
+        }
+        log.info("Credentials For Testing Added Successfully!");
     }
 
 
@@ -125,6 +142,17 @@ public class DataLoader implements CommandLineRunner {
         Course course = container.getCourse();
         this.baseEntityValidator.validate(course);
         this.baseNamedEntityValidator.validate(course);
+    }
+
+    private void addCredentials(Student student, SchoolUserRole role) {
+        SchoolUserCredentials credentials = SchoolUserCredentials.builder()
+                .username(student.getName() + student.getId())
+                .password(passwordEncoder.encode("password"))
+                .student(student)
+                .userRole(role)
+                .build();
+        student.setCredentials(credentials);
+        this.studentRepository.save(student);
     }
 
 }

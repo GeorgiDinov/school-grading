@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), this.jwtPropertyHolder))
                 .addFilterAfter(new JwtTokenVerifier(this.jwtPropertyHolder), JwtUsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api-docs", "/swagger-ui-custom.html").permitAll()
+                .antMatchers("/api-docs", "/swagger-ui.html").permitAll()
                 .antMatchers("/api/v1/**").hasRole(ADMIN.name())
                 .anyRequest()
                 .authenticated();

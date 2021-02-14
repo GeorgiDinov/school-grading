@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,7 @@ public class CourseController {
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CourseListDTO findAllCourses() {
         log.info("CourseController::findAllCourses");
         return this.courseService.findAllCourses();
@@ -67,6 +69,7 @@ public class CourseController {
     })
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('course:read')")
     public CourseDTO findCourseById(@PathVariable String id) {
         log.info("CourseController::findCourseById -> id passed = {}", id);
         return this.courseService.findCourseById(Long.valueOf(id));
@@ -83,6 +86,7 @@ public class CourseController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('course:write')")
     public CourseDTO saveCourse(@RequestBody CourseDTO courseDTO) throws EntityValidationException {
         log.info("CourseController::saveCourse -> courseDTO passed = {}", courseDTO);
         return this.courseService.saveCourse(courseDTO);
@@ -103,6 +107,7 @@ public class CourseController {
     })
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('course:write')")
     public CourseDTO updateCourse(@PathVariable String id,
                                   @RequestBody CourseDTO courseDTO) throws EntityValidationException {
         log.info("CourseController::updateCourse -> id passes = {} courseDTO passed = {}", id, courseDTO);
@@ -124,6 +129,7 @@ public class CourseController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('course:write')")
     public void deleteCourseById(@PathVariable String id) {
         log.info("CourseController::deleteCourse -> id passed = {}", id);
         this.courseService.deleteCourseById(Long.valueOf(id));

@@ -8,6 +8,7 @@ import com.georgidinov.roiti.schoolgrading.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ public class StudentController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public StudentListDTO findAllStudents() {
         log.info("StudentController::findAllStudents");
         return this.studentService.findAllStudents();
@@ -43,6 +45,7 @@ public class StudentController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('student:read')")
     public StudentDTO findStudentById(@PathVariable String id) {
         log.info("StudentController::findStudentById -> id passed = {}", id);
         return this.studentService.findStudentById(Long.valueOf(id));
@@ -50,6 +53,7 @@ public class StudentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('student:write')")
     public StudentDTO saveStudent(@RequestBody StudentDTO studentDTO) throws EntityValidationException {
         log.info("StudentController::saveStudent -> studentDTO passed = {}", studentDTO);
         return this.studentService.saveStudent(studentDTO);
@@ -57,6 +61,7 @@ public class StudentController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('student:write')")
     public StudentDTO updateStudent(@PathVariable String id,
                                     @RequestBody StudentDTO studentDTO) throws EntityValidationException {
         log.info("StudentController::updateStudent -> id passed = {} studentDTO passed = {}", id, studentDTO);
@@ -65,6 +70,7 @@ public class StudentController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('student:write')")
     public void deleteStudentById(@PathVariable String id) {
         log.info("StudentController::deleteStudentById -> id passed = {}", id);
         this.studentService.deleteStudentById(Long.valueOf(id));
