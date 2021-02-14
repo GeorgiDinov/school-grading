@@ -83,7 +83,7 @@ public class DataLoader implements CommandLineRunner {
         this.studentRepository.saveAll(studentSet);
         log.info("Data saved successfully...");
 
-        log.info("Adding some credentials...");
+        log.info("Adding Some Credentials For Testing Purposes...");
         for (long i = 1; i < 5; i++) {
             SchoolUserRole role = (i % 2 != 0) ? USER : ADMIN;
             Student student = this.studentRepository.findById(i).orElseThrow();

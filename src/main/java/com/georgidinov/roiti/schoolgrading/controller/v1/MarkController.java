@@ -5,6 +5,7 @@ import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.MarkListDTO;
 import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.service.MarkService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.MARK
 @Slf4j
 @RestController
 @RequestMapping(MARK_BASE_URL)
+@SecurityRequirement(name = "bearerAuth")
 public class MarkController {
 
     //== fields ==

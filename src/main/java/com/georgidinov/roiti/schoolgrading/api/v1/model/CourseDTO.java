@@ -3,6 +3,7 @@ package com.georgidinov.roiti.schoolgrading.api.v1.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.georgidinov.roiti.schoolgrading.baseentity.BaseNamedEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class CourseDTO implements BaseNamedEntity {
     private String name;
 
 
+    @Schema(nullable = true)
     @JsonProperty("course_url")
     private String courseUrl;
 

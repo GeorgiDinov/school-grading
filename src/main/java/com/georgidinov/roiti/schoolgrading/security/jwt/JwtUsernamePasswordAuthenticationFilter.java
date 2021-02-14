@@ -77,11 +77,5 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
 
         log.info("Token issued = {}", jwtPropertyHolder.getTokenPrefix() + token);
 
-//        RegisteredUserCommand command = new RegisteredUserCommand(userDetails.getUserId(), userDetails.getUsername());
-//        String json = new ObjectMapper()
-//                .writeValueAsString(ResponseEntity.of(Optional.of(command)).getBody());
-//        log.info("The json = {}", json);
-//        response.setContentType("application/json");
-//        response.getWriter().write(json);
     }
 }

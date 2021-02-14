@@ -5,6 +5,7 @@ import com.georgidinov.roiti.schoolgrading.api.v1.model.StudentDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.model.StudentListDTO;
 import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.service.StudentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.STUD
 @Slf4j
 @RestController
 @RequestMapping(STUDENT_BASE_URL)
+@SecurityRequirement(name = "bearerAuth")
 public class StudentController {
 
     //== fields ==
