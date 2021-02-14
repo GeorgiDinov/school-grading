@@ -9,12 +9,31 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MarkRepository extends JpaRepository<Mark, Long> {
 
-    @Query("SELECT AVG(mark) FROM Mark WHERE course.name = :courseName AND student.id = :studentId")
+    //the average mark a single student has in a single course
+    @Query("SELECT AVG(mark) FROM Mark WHERE course.id = :courseId AND student.id = :studentId")
     Double avgMarkForStudentInSingleCourse(@Param("studentId") Long studentId,
-                                           @Param("courseName") String courseName);
+                                           @Param("courseId") Long courseId);
 
 
+    //the average mark a single student has across all courses
     @Query("SELECT AVG(mark) FROM Mark WHERE student.id = :studentId")
     Double avgMarkForStudentInAllCourses(@Param("studentId") Long studentId);
+
+
+    //todo in progress 4, 27
+    //the average mark all students were given in a single course
+    @Query("SELECT AVG(mark) FROM Mark WHERE course.id = :courseId")
+    Double avgMarkForACourse(@Param("courseId") Long courseId);
+
+
+    //the average mark all students were given in all courses
+    @Query("SELECT AVG(mark) FROM Mark")
+    Double avgMarkForAllStudentsInAllCourses();
+
+
+    //todo not implemented ---------------------------------------------------
+    //the average mark for all existing combinations of a student and a course;
+    //Double avgForAllExistingCombinationsForStudentAndCourse();
+
 
 }

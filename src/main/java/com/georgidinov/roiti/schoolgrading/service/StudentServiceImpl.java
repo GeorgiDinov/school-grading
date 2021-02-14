@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_STUDENT_EXISTS;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_STUDENT_NOT_FOUND;
 
 
@@ -63,7 +64,8 @@ public class StudentServiceImpl implements StudentService {
         log.info("StudentServiceImpl::saveStudent -> studentDTO passed = {}", studentDTO);
         this.baseNamedEntityValidator.validate(studentDTO);
         if (isStudentNameExists(studentDTO)) {
-            throw new RuntimeException("Student Exists...");//todo custom exception
+            throw new EntityValidationException(
+                    String.format(ERROR_STUDENT_EXISTS, studentDTO.getName()));
         }
         return this.saveStudentToDatabase(this.studentMapper.studentDTOToStudent(studentDTO));
     }
@@ -73,7 +75,8 @@ public class StudentServiceImpl implements StudentService {
         log.info("StudentServiceImpl::updateStudent -> id passed = {}, studentDTO passed = {}", id, studentDTO);
         this.baseNamedEntityValidator.validate(studentDTO);
         if (isStudentNameExists(studentDTO)) {
-            throw new RuntimeException("Student Exists...");//todo custom exception
+            throw new EntityValidationException(
+                    String.format(ERROR_STUDENT_EXISTS, studentDTO.getName()));
         }
         Student student = this.studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundCustomException(

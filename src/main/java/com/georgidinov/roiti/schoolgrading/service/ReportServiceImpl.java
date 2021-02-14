@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_COURSE_NOT_FOUND;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_STUDENT_NOT_FOUND;
 
 
@@ -36,14 +37,15 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportDTO avgMarkForStudentInSingleCourse(Long studentId, CourseDTO courseDTO) throws EntityValidationException {
-        log.info("ReportService::avgMarkForStudentInSingleCourse -> studentId passed = {} courseDTO = {}", studentId, courseDTO);
+    public ReportDTO avgMarkForStudentInSingleCourse(Long studentId, Long courseId) throws EntityValidationException {
+        log.info("ReportService::avgMarkForStudentInSingleCourse -> studentId passed = {} courseId = {}", studentId, courseId);
         validateStudentId(studentId);
-        validateCourseDTO(courseDTO);
-        Double result = markRepository.avgMarkForStudentInSingleCourse(studentId, courseDTO.getName());
+        validateCourseId(courseId);
+        Double result = markRepository.avgMarkForStudentInSingleCourse(studentId, courseId);
         return reportBuilder(result);
     }
 
+    @Override
     public ReportDTO avgMarkForStudentInAllCourses(Long studentId) throws EntityValidationException {
         log.info("ReportService::avgMarkForStudentInAllCourses -> studentId passed = {}", studentId);
         validateStudentId(studentId);
@@ -51,6 +53,26 @@ public class ReportServiceImpl implements ReportService {
         return reportBuilder(result);
     }
 
+    @Override
+    public ReportDTO avgMarkForACourse(Long courseId) throws EntityValidationException {
+        log.info("ReportService::avgMarkForACourse");
+        this.validateCourseId(courseId);
+        return this.reportBuilder(this.markRepository.avgMarkForACourse(courseId));
+    }
+
+    @Override
+    public ReportDTO avgMarkForAllStudentsInAllCourses() {
+        log.info("ReportService::avgMarkForAllStudentsInAllCourses");
+        return reportBuilder(this.markRepository.avgMarkForAllStudentsInAllCourses());
+    }
+
+
+    //todo IMPLEMENTATION --------------------------------------------------
+    @Override
+    public ReportDTO avgForAllExistingCombinationsForStudentAndCourse() {
+        log.info("ReportService::avgForAllExistingCombinationsForStudentAndCourse");
+        return new ReportDTO("THIS FUNCTIONALITY IS NOT IMPLEMENTED YET!");
+    }
 
     //== private methods ==
     private void validateCourseDTO(CourseDTO courseDTO) throws EntityValidationException {
@@ -62,6 +84,12 @@ public class ReportServiceImpl implements ReportService {
     private void validateStudentId(Long studentId) throws EntityValidationException {
         if (!this.studentRepository.existsById(studentId)) {
             throw new EntityValidationException(String.format(ERROR_STUDENT_NOT_FOUND, studentId));
+        }
+    }
+
+    private void validateCourseId(Long courseId) throws EntityValidationException {
+        if (!this.courseRepository.existsById(courseId)) {
+            throw new EntityValidationException(String.format(ERROR_COURSE_NOT_FOUND, courseId));
         }
     }
 

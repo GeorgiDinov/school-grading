@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_COURSE_EXISTS;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ERROR_COURSE_NOT_FOUND;
 
 @Slf4j
@@ -61,7 +62,8 @@ public class CourseServiceImpl implements CourseService {
         log.info("CourseService::saveCourse -> course DTO passed  = {}", courseDTO);
         this.baseNamedEntityValidator.validate(courseDTO);
         if (isCourseWithNameExist(courseDTO)) {
-            throw new RuntimeException("Course Exists...");// todo custom exception
+            throw new EntityValidationException(
+                    String.format(ERROR_COURSE_EXISTS, courseDTO.getName()));
         }
         return this.saveCourseToDatabase(this.courseMapper.courseDTOToCourse(courseDTO));
     }
@@ -71,7 +73,8 @@ public class CourseServiceImpl implements CourseService {
         log.info("CourseService::updateCourse -> course DTO passed  = {}", courseDTO);
         this.baseNamedEntityValidator.validate(courseDTO);
         if (isCourseWithNameExist(courseDTO)) {
-            throw new RuntimeException("Course exists");// todo custom exception
+            throw new EntityValidationException(
+                    String.format(ERROR_COURSE_EXISTS, courseDTO.getName()));
         }
         Course course = this.courseRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundCustomException(
