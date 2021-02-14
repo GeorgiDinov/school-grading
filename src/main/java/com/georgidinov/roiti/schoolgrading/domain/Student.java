@@ -12,10 +12,13 @@ import lombok.ToString;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,6 +56,11 @@ public class Student implements BaseEntity, BaseNamedEntity {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
     )
     private Set<Mark> marks = new HashSet<>();
+
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_credentials_id")
+    private SchoolUserCredentials credentials;
 
     //== public methods ==
     @Override

@@ -63,7 +63,7 @@ class MarkServiceImplTest {
         //given
         List<Mark> marks = new ArrayList<>();
         Course course = new Course(1L, "TestCourseOne", new HashSet<>());
-        Student student = new Student(1L, "TestStudentOne", new HashSet<>());
+        Student student = new Student(1L, "TestStudentOne", new HashSet<>(),null);
         marks.add(new Mark(1L, 5.00d, LocalDateTime.now(), course, student));
         marks.add(new Mark(2L, 4.00d, LocalDateTime.now(), course, student));
         marks.add(new Mark(3L, 6.00d, LocalDateTime.now(), course, student));
@@ -82,7 +82,7 @@ class MarkServiceImplTest {
         //given
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(ENTITY_MARK_DATE_TIME_FORMAT);
         Course course = new Course(1L, "TestCourseOne", new HashSet<>());
-        Student student = new Student(1L, "TestStudentOne", new HashSet<>());
+        Student student = new Student(1L, "TestStudentOne", new HashSet<>(), null);
         Mark mark = new Mark(1L, 5.00d, LocalDateTime.now(), course, student);
 
         when(this.markRepository.findById(anyLong())).thenReturn(Optional.of(mark));
