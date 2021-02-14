@@ -1,6 +1,5 @@
 package com.georgidinov.roiti.schoolgrading.service;
 
-import com.georgidinov.roiti.schoolgrading.api.v1.model.CourseDTO;
 import com.georgidinov.roiti.schoolgrading.api.v1.report.ReportDTO;
 import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.repository.CourseRepository;
@@ -23,7 +22,6 @@ public class ReportServiceImpl implements ReportService {
     private final CourseRepository courseRepository;
     private final StudentRepository studentRepository;
     private final MarkRepository markRepository;
-    private final BaseNamedEntityValidator baseNamedEntityValidator;
 
     @Autowired
     public ReportServiceImpl(CourseRepository courseRepository,
@@ -33,7 +31,6 @@ public class ReportServiceImpl implements ReportService {
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
         this.markRepository = markRepository;
-        this.baseNamedEntityValidator = baseNamedEntityValidator;
     }
 
     @Override
@@ -75,12 +72,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     //== private methods ==
-    private void validateCourseDTO(CourseDTO courseDTO) throws EntityValidationException {
-        this.baseNamedEntityValidator.validate(courseDTO);
-        this.courseRepository.findCourseByName(courseDTO.getName())
-                .orElseThrow(() -> new RuntimeException("Course Not Found"));
-    }
-
     private void validateStudentId(Long studentId) throws EntityValidationException {
         if (!this.studentRepository.existsById(studentId)) {
             throw new EntityValidationException(String.format(ERROR_STUDENT_NOT_FOUND, studentId));
@@ -95,8 +86,10 @@ public class ReportServiceImpl implements ReportService {
 
     private ReportDTO reportBuilder(Double result) {
         log.info("Result = {}", result);
-        String reportData = String.format("Average Result = %.2f", result);
-        return new ReportDTO(reportData);
+        String formattedResult = result != null
+                ? String.format("Average Result = %.2f", result)
+                : "No Data Found";
+        return new ReportDTO(formattedResult);
     }
 
 }
