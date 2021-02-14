@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,12 +19,16 @@ import lombok.ToString;
 @ToString
 public class MarkDTO {
 
+    @NotNull
     private double mark;
+
     private String date;
 
+    @NotNull
     @JsonProperty("student_name")
     private String studentName;
 
+    @NotNull
     @JsonProperty("course_name")
     private String courseName;
 

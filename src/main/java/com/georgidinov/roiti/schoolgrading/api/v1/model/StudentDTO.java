@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,6 +20,7 @@ import lombok.ToString;
 @Builder
 public class StudentDTO implements BaseNamedEntity {
 
+    @NotNull
     @JsonProperty("student_name")
     private String name;
 

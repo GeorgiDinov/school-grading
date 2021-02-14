@@ -30,7 +30,7 @@ public final class ApplicationConstants {
     public static final String ERROR_MARK_NOT_FOUND = "Mark with id = %d not found";
     public static final String ERROR_STUDENT_NOT_FOUND = "Student with id = %d not found";
     public static final String ERROR_STUDENT_EXISTS = "Student with name = %s exists";
-    public static final String ERROR_COURSE_EXISTS = "Student with name = %s exists";
+    public static final String ERROR_COURSE_EXISTS = "Course with name = %s exists";
 
     //== Mark Exception Messages
     public static final String ERROR_ENTITY_MARK_VALUE_IS_NOT_PRESENT = "Mark Value Is Null";

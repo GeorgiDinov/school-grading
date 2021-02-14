@@ -98,6 +98,9 @@ public class MarkServiceImpl implements MarkService {
             log.info("Thread was interrupted {}", e.getMessage());
         }
         log.info("MarkServiceImpl::deleteMarkById -> id passed = {}", id);
+        if (!this.markRepository.existsById(id)) {
+            throw new EntityNotFoundCustomException(String.format(ERROR_MARK_NOT_FOUND, id));
+        }
         this.markRepository.deleteById(id);
     }
 

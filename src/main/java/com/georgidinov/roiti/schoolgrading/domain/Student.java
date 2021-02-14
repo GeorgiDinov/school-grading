@@ -74,15 +74,17 @@ public class Student implements BaseEntity, BaseNamedEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Student)) {
             return false;
         }
         Student student = (Student) o;
 
-        if (name.equals(student.name)) {
+        if (!this.id.equals(student.getId())) {
             return true;
         }
-        return id.equals(student.id);
+
+        return this.name.equals(student.getName());
+
     }
 
     @Override

@@ -63,10 +63,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentDTO saveStudent(StudentDTO studentDTO) throws EntityValidationException {
         log.info("StudentServiceImpl::saveStudent -> studentDTO passed = {}", studentDTO);
         this.baseNamedEntityValidator.validate(studentDTO);
-        if (isStudentNameExists(studentDTO)) {
-            throw new EntityValidationException(
-                    String.format(ERROR_STUDENT_EXISTS, studentDTO.getName()));
-        }
+        this.validateStudentExistence(studentDTO);
         return this.saveStudentToDatabase(this.studentMapper.studentDTOToStudent(studentDTO));
     }
 
@@ -74,10 +71,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentDTO updateStudent(Long id, StudentDTO studentDTO) throws EntityValidationException {
         log.info("StudentServiceImpl::updateStudent -> id passed = {}, studentDTO passed = {}", id, studentDTO);
         this.baseNamedEntityValidator.validate(studentDTO);
-        if (isStudentNameExists(studentDTO)) {
-            throw new EntityValidationException(
-                    String.format(ERROR_STUDENT_EXISTS, studentDTO.getName()));
-        }
+        this.validateStudentExistence(studentDTO);
         Student student = this.studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundCustomException(
                         String.format(ERROR_STUDENT_NOT_FOUND, id))
@@ -89,6 +83,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudentById(Long id) {
         log.info("StudentServiceImpl::deleteStudentById -> id passed = {}", id);
+        if (!this.studentRepository.existsById(id)) {
+            throw new EntityNotFoundCustomException(String.format(ERROR_STUDENT_NOT_FOUND, id));
+        }
         this.studentRepository.deleteById(id);
     }
 
@@ -98,9 +95,11 @@ public class StudentServiceImpl implements StudentService {
         return this.studentMapper.studentToStudentDTO(savedStudent);
     }
 
-    private boolean isStudentNameExists(StudentDTO studentDTO) {
+    private void validateStudentExistence(StudentDTO studentDTO) throws EntityValidationException {
         Optional<Student> studentOptional = this.studentRepository.findStudentByName(studentDTO.getName());
-        return studentOptional.isPresent();
+        if (studentOptional.isPresent()) {
+            throw new EntityValidationException(String.format(ERROR_STUDENT_EXISTS, studentDTO.getName()));
+        }
     }
 
 }

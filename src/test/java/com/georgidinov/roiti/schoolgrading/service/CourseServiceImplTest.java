@@ -137,6 +137,7 @@ class CourseServiceImplTest {
 
     @Test
     void deleteCourseById() {
+        when(courseRepository.existsById(anyLong())).thenReturn(true);
         this.courseService.deleteCourseById(anyLong());
         verify(courseRepository).deleteById(anyLong());
     }

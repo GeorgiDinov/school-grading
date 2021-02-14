@@ -61,10 +61,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO saveCourse(CourseDTO courseDTO) throws EntityValidationException {
         log.info("CourseService::saveCourse -> course DTO passed  = {}", courseDTO);
         this.baseNamedEntityValidator.validate(courseDTO);
-        if (isCourseWithNameExist(courseDTO)) {
-            throw new EntityValidationException(
-                    String.format(ERROR_COURSE_EXISTS, courseDTO.getName()));
-        }
+        this.validateCourseExistence(courseDTO);
         return this.saveCourseToDatabase(this.courseMapper.courseDTOToCourse(courseDTO));
     }
 
@@ -72,10 +69,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO updateCourse(Long id, CourseDTO courseDTO) throws EntityValidationException {
         log.info("CourseService::updateCourse -> course DTO passed  = {}", courseDTO);
         this.baseNamedEntityValidator.validate(courseDTO);
-        if (isCourseWithNameExist(courseDTO)) {
-            throw new EntityValidationException(
-                    String.format(ERROR_COURSE_EXISTS, courseDTO.getName()));
-        }
+        this.validateCourseExistence(courseDTO);
         Course course = this.courseRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundCustomException(
                         String.format(ERROR_COURSE_NOT_FOUND, id))
@@ -87,6 +81,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void deleteCourseById(Long id) {
         log.info("CourseService::deleteCourseById -> id passed = {}", id);
+        if (!this.courseRepository.existsById(id)) {
+            throw new EntityNotFoundCustomException(String.format(ERROR_COURSE_NOT_FOUND, id));
+        }
         this.courseRepository.deleteById(id);
     }
 
@@ -98,8 +95,10 @@ public class CourseServiceImpl implements CourseService {
         return this.courseMapper.courseToCourseDTO(savedCourse);
     }
 
-    private boolean isCourseWithNameExist(CourseDTO courseDTO) {
+    private void validateCourseExistence(CourseDTO courseDTO) throws EntityValidationException {
         Optional<Course> optionalCourse = this.courseRepository.findCourseByName(courseDTO.getName());
-        return optionalCourse.isPresent();
+        if (optionalCourse.isPresent()) {
+            throw new EntityValidationException(String.format(ERROR_COURSE_EXISTS, courseDTO.getName()));
+        }
     }
 }
