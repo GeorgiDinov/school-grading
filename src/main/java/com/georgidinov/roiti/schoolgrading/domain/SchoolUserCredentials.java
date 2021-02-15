@@ -19,6 +19,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_SCHOOL_CREDENTIALS_COLUMN_NAME_USER_CREDENTIALS_ID;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_SCHOOL_CREDENTIALS_TABLE_NAME;
+
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -26,13 +29,13 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user_credentials")
+@Table(name = ENTITY_SCHOOL_CREDENTIALS_TABLE_NAME)
 public class SchoolUserCredentials {
 
     // == fields ==
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_credentials_id")
+    @Column(name = ENTITY_SCHOOL_CREDENTIALS_COLUMN_NAME_USER_CREDENTIALS_ID)
     private Long id;
 
     private String username;

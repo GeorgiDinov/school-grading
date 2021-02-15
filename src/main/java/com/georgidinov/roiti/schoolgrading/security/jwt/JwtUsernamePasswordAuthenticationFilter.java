@@ -63,7 +63,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
                                             Authentication authResult) throws IOException, ServletException {
 
         SchoolUserDetails userDetails = (SchoolUserDetails) authResult.getPrincipal();
-        log.info("UserDetails id={} and name={} in successfulAuthMethod", userDetails.getUserId(), userDetails.getUsername());
+        log.info("UserDetails id={} and username={} in successfulAuthMethod", userDetails.getUserId(), userDetails.getUsername());
 
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
@@ -75,7 +75,15 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
 
         response.addHeader(jwtPropertyHolder.getAuthorizationHeader(), jwtPropertyHolder.getTokenPrefix() + token);
 
-        log.info("Token issued = {}", jwtPropertyHolder.getTokenPrefix() + token);
+        String issuedToken = jwtPropertyHolder.getTokenPrefix() + token;
+        log.info("Token issued = {}", issuedToken);
 
+        //uncomment to return the token on login
+//        ReportDTO tokenReport = new ReportDTO(issuedToken);
+//        String json = new ObjectMapper()
+//                .writeValueAsString(ResponseEntity.of(Optional.of(tokenReport)).getBody());
+//        log.info("The json = {}", json);
+//        response.setContentType("application/json");
+//        response.getWriter().write(json);
     }
 }
