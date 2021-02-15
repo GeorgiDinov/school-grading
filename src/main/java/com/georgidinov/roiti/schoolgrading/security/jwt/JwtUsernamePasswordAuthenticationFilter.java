@@ -1,11 +1,9 @@
 package com.georgidinov.roiti.schoolgrading.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.georgidinov.roiti.schoolgrading.api.v1.report.ReportDTO;
 import com.georgidinov.roiti.schoolgrading.security.auth.SchoolUserDetails;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Optional;
 
 @Slf4j
 public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -66,7 +63,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
                                             Authentication authResult) throws IOException, ServletException {
 
         SchoolUserDetails userDetails = (SchoolUserDetails) authResult.getPrincipal();
-        log.info("UserDetails id={} and name={} in successfulAuthMethod", userDetails.getUserId(), userDetails.getUsername());
+        log.info("UserDetails id={} and username={} in successfulAuthMethod", userDetails.getUserId(), userDetails.getUsername());
 
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
@@ -81,11 +78,12 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
         String issuedToken = jwtPropertyHolder.getTokenPrefix() + token;
         log.info("Token issued = {}", issuedToken);
 
-        ReportDTO tokenReport = new ReportDTO(issuedToken);
-        String json = new ObjectMapper()
-                .writeValueAsString(ResponseEntity.of(Optional.of(tokenReport)).getBody());
-        log.info("The json = {}", json);
-        response.setContentType("application/json");
-        response.getWriter().write(json);
+        //uncomment to return the token on login
+//        ReportDTO tokenReport = new ReportDTO(issuedToken);
+//        String json = new ObjectMapper()
+//                .writeValueAsString(ResponseEntity.of(Optional.of(tokenReport)).getBody());
+//        log.info("The json = {}", json);
+//        response.setContentType("application/json");
+//        response.getWriter().write(json);
     }
 }

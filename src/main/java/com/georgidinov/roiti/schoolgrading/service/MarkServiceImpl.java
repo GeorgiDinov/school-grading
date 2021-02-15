@@ -16,6 +16,7 @@ import com.georgidinov.roiti.schoolgrading.repository.StudentRepository;
 import com.georgidinov.roiti.schoolgrading.validation.BaseNamedEntityValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -90,6 +91,8 @@ public class MarkServiceImpl implements MarkService {
         return this.saveMarkToDatabase(mark);
     }
 
+
+    @Async
     @Override
     public void deleteMarkById(Long id) {
         try {

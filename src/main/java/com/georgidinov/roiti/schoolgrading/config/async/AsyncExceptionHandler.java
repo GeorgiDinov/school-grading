@@ -14,6 +14,7 @@ public class AsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
     @SneakyThrows
     @Override
     public void handleUncaughtException(Throwable ex, Method method, Object... args) {
-        log.error("Async Error Occurred In method with name = {} error message = {}", method.getName(), ex.getMessage());
+        log.error("Async Error Occurred In method with name = {} error message = {}",
+                method.getName(), ex.getMessage());
     }
 }

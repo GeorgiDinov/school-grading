@@ -26,6 +26,7 @@ import java.util.Set;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.CSV_HEADER_STUDENT_ID;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.CSV_HEADER_STUDENT_NAME;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_MAPPING_STUDENT;
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_SCHOOL_CREDENTIALS_COLUMN_NAME_USER_CREDENTIALS_ID;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_STUDENT_COLUMN_NAME_STUDENT_ID;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_STUDENT_COLUMN_NAME_STUDENT_NAME;
 import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.ENTITY_STUDENT_TABLE_NAME;
@@ -59,7 +60,7 @@ public class Student implements BaseEntity, BaseNamedEntity {
 
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_credentials_id")
+    @JoinColumn(name = ENTITY_SCHOOL_CREDENTIALS_COLUMN_NAME_USER_CREDENTIALS_ID)
     private SchoolUserCredentials credentials;
 
     //== public methods ==
@@ -87,7 +88,7 @@ public class Student implements BaseEntity, BaseNamedEntity {
         }
         Student student = (Student) o;
 
-        if (!this.id.equals(student.getId())) {
+        if (this.id.equals(student.getId())) {
             return true;
         }
 

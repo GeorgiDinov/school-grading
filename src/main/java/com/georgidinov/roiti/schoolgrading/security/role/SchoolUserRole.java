@@ -20,7 +20,8 @@ public enum SchoolUserRole {
     ADMIN(Sets.newHashSet(
             MARK_READ, MARK_WRITE,
             STUDENT_READ, STUDENT_WRITE,
-            COURSE_READ, COURSE_WRITE));
+            COURSE_READ, COURSE_WRITE,
+            AVERAGE_MARK_READ));
 
     //== fields ==
     private final Set<SchoolUserPermission> permissions;

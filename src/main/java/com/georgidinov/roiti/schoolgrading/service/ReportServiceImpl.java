@@ -5,7 +5,6 @@ import com.georgidinov.roiti.schoolgrading.exception.EntityValidationException;
 import com.georgidinov.roiti.schoolgrading.repository.CourseRepository;
 import com.georgidinov.roiti.schoolgrading.repository.MarkRepository;
 import com.georgidinov.roiti.schoolgrading.repository.StudentRepository;
-import com.georgidinov.roiti.schoolgrading.validation.BaseNamedEntityValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +25,7 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     public ReportServiceImpl(CourseRepository courseRepository,
                              StudentRepository studentRepository,
-                             MarkRepository markRepository,
-                             BaseNamedEntityValidator baseNamedEntityValidator) {
+                             MarkRepository markRepository) {
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
         this.markRepository = markRepository;

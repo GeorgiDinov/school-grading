@@ -49,11 +49,11 @@ public class Mark implements BaseEntity {
     @CsvDate(ENTITY_MARK_DATE_TIME_FORMAT)
     private LocalDateTime markDate;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = ENTITY_COURSE_COLUMN_NAME_COURSE_ID)
     private Course course;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = ENTITY_STUDENT_COLUMN_NAME_STUDENT_ID)
     private Student student;
 

@@ -19,6 +19,9 @@ public final class ApplicationConstants {
     public static final String ENTITY_MARK_COLUMN_NAME_MARK_DATE = "mark_date";
     public static final String ENTITY_MARK_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
+    public static final String ENTITY_SCHOOL_CREDENTIALS_TABLE_NAME = "user_credentials";
+    public static final String ENTITY_SCHOOL_CREDENTIALS_COLUMN_NAME_USER_CREDENTIALS_ID = "user_credentials_id";
+
     //== Entity Exception Messages
     public static final String ERROR_ENTITY_IS_NULL = "Entity Is Null";
     public static final String ERROR_ENTITY_ID_IS_NULL = "Entity Id Is Null";

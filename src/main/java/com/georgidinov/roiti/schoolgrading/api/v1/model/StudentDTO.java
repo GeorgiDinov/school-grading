@@ -3,14 +3,13 @@ package com.georgidinov.roiti.schoolgrading.api.v1.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.georgidinov.roiti.schoolgrading.baseentity.BaseNamedEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -20,10 +19,11 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class StudentDTO implements BaseNamedEntity {
 
-    @NotNull
+    @Schema(required = true)
     @JsonProperty("student_name")
     private String name;
 
+    @Schema(nullable = true)
     @JsonProperty("student_url")
     private String studentUrl;
 

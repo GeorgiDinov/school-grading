@@ -34,7 +34,7 @@ public class ReportController {
 
     @GetMapping("/avg/student/{studentId}/course/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('avg:read')")
     public ReportDTO avgMarkForStudentInSingleCourse(@PathVariable String studentId,
                                                      @PathVariable String courseId) throws EntityValidationException {
         log.info("ReportController::avgMarkForStudentInSingleCourse -> studentId passed = {}, courseId passed = {}", studentId, courseId);
