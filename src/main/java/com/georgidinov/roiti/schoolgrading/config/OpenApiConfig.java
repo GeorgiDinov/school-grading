@@ -1,16 +1,27 @@
 package com.georgidinov.roiti.schoolgrading.config;
 
+import com.georgidinov.roiti.schoolgrading.security.jwt.UsernameAndPasswordAuthenticationRequest;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.ObjectSchema;
+import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.parameters.RequestBody;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP;
@@ -27,10 +38,42 @@ import static io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP;
 public class OpenApiConfig {
 
 
+    private UsernameAndPasswordAuthenticationRequest authenticationRequest;
+
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI().info(applicationInfo());
+        return new OpenAPI()
+                .paths(new Paths().addPathItem("/login", new PathItem().post(this.operation())))
+                .info(applicationInfo());
     }
+
+
+    private List<Parameter> parameters() {
+        Parameter username = new Parameter()
+                .name("username")
+                .schema(new StringSchema().name("username"));
+        Parameter password = new Parameter()
+                .name("password")
+                .schema(new StringSchema().name("password"));
+
+        List<Parameter> parameters = new ArrayList<>();
+        parameters.add(username);
+        parameters.add(password);
+        return parameters;
+    }
+
+    private Operation operation() {
+        Operation operation = new Operation();
+        operation.requestBody(new RequestBody()
+                .content(new Content().addMediaType("application/json",
+                        new MediaType().schema(new ObjectSchema()
+                                .example(authenticationRequest)
+                                .addProperties("username", new StringSchema())
+                                .addProperties("password", new StringSchema())
+                        ))));
+        return operation;
+    }
+
 
     private Info applicationInfo() {
 
