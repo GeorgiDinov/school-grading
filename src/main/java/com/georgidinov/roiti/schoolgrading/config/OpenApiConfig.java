@@ -1,6 +1,7 @@
 package com.georgidinov.roiti.schoolgrading.config;
 
-import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -12,14 +13,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP;
+
+
+@OpenAPIDefinition
 @Configuration
+@SecurityScheme(
+        name = "bearerAuth",
+        type = HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
 public class OpenApiConfig {
+
 
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI()
-                .components(new Components())
-                .info(applicationInfo());
+        return new OpenAPI().info(applicationInfo());
     }
 
     private Info applicationInfo() {

@@ -49,9 +49,9 @@ class StudentServiceImplTest {
     void findAllStudents() {
         //given
         List<Student> students = new ArrayList<>();
-        students.add(new Student(1L, "John Doe", new HashSet<>()));
-        students.add(new Student(2L, "Anna Smith", new HashSet<>()));
-        students.add(new Student(3L, "Linn Jones", new HashSet<>()));
+        students.add(new Student(1L, "John Doe", new HashSet<>(), null));
+        students.add(new Student(2L, "Anna Smith", new HashSet<>(), null));
+        students.add(new Student(3L, "Linn Jones", new HashSet<>(),null));
         when(this.studentRepository.findAll()).thenReturn(students);
 
         //when
@@ -65,7 +65,7 @@ class StudentServiceImplTest {
     @Test
     void findStudentById() {
         //given
-        Student student = new Student(1L, "John Doe", new HashSet<>());
+        Student student = new Student(1L, "John Doe", new HashSet<>(), null);
         when(this.studentRepository.findById(anyLong())).thenReturn(Optional.of(student));
 
         //when
@@ -103,7 +103,7 @@ class StudentServiceImplTest {
         StudentDTO requestDTO = StudentDTO.builder().name("John Doe").build();
         StudentDTO expectedResponseDTO = StudentDTO.builder()
                 .name("John Doe").studentUrl(STUDENT_BASE_URL + "/" + 1).build();
-        Student student = new Student(1L, "John Doe", new HashSet<>());
+        Student student = new Student(1L, "John Doe", new HashSet<>(), null);
         when(this.studentRepository.save(any(Student.class))).thenReturn(student);
 
         //when
@@ -118,7 +118,7 @@ class StudentServiceImplTest {
     @Test
     void updateStudent() throws EntityValidationException {
         //given
-        Student student = new Student(1L, "John Doe", new HashSet<>());
+        Student student = new Student(1L, "John Doe", new HashSet<>(), null);
         StudentDTO requestDTO = StudentDTO.builder().name("John Doe Updated").build();
         StudentDTO expectedResponseDTO = StudentDTO.builder()
                 .name("John Doe Updated").studentUrl(STUDENT_BASE_URL + "/" + 1).build();
