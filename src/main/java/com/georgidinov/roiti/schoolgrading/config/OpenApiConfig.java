@@ -3,9 +3,19 @@ package com.georgidinov.roiti.schoolgrading.config;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.ObjectSchema;
+import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.georgidinov.roiti.schoolgrading.util.ApplicationConstants.LOGIN_MEDIA_TYPE;
 import static io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP;
 
 
@@ -29,7 +40,43 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI().info(applicationInfo());
+        return new OpenAPI()
+                .paths(new Paths().addPathItem("/login", this.loginPathItem().description("Login")))
+                .info(applicationInfo());
+    }
+
+    private PathItem loginPathItem() {
+        return new PathItem().post(this.loginOperation());
+    }
+
+    private Operation loginOperation() {
+        Operation operation = new Operation()
+                .responses(this.loginResponses())
+                .description("Login");
+        operation.requestBody(this.loginRequestBody());
+        return operation;
+    }
+
+    private RequestBody loginRequestBody() {
+        return new RequestBody().content(this.loginContent());
+    }
+
+    private Content loginContent() {
+        return new Content().addMediaType(LOGIN_MEDIA_TYPE, this.loginMediaType());
+    }
+
+    private MediaType loginMediaType() {
+        return new MediaType().schema(new ObjectSchema()
+                .addProperties("username", new StringSchema().name("username"))
+                .addProperties("password", new StringSchema().name("password"))
+        );
+    }
+
+    private ApiResponses loginResponses() {
+        ApiResponses apiResponses = new ApiResponses();
+        apiResponses.addApiResponse("200", new ApiResponse().headers(new HashMap<>()).description("OK"));
+        apiResponses.addApiResponse("403", new ApiResponse().headers(new HashMap<>()).description("Forbidden"));
+        return apiResponses;
     }
 
     private Info applicationInfo() {
