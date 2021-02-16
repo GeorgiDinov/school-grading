@@ -59,6 +59,10 @@ public final class ApplicationConstants {
     public static final String COURSE_BASE_URL = API_V1 + "/course";
     public static final String REPORT_BASE_URL = API_V1 + "/report";
 
+
+    public static final String LOGIN_MEDIA_TYPE = "application/json";
+
+
     private ApplicationConstants() {
     }
 
