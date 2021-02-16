@@ -41,20 +41,19 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .paths(new Paths().addPathItem("/login", this.loginPathItem().description("Login")))
+                .paths(new Paths().addPathItem("/login", this.loginPathItem()))
                 .info(applicationInfo());
     }
 
     private PathItem loginPathItem() {
-        return new PathItem().post(this.loginOperation());
+        return new PathItem().post(this.loginOperation()).description("Login");
     }
 
     private Operation loginOperation() {
-        Operation operation = new Operation()
+        return new Operation()
+                .requestBody(this.loginRequestBody())
                 .responses(this.loginResponses())
                 .description("Login");
-        operation.requestBody(this.loginRequestBody());
-        return operation;
     }
 
     private RequestBody loginRequestBody() {
