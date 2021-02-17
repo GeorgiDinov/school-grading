@@ -20,10 +20,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -95,14 +95,17 @@ public class DataLoader implements CommandLineRunner {
 
     //== private methods ==
     private List<MyBeanContainer> fetchData() {
-        Path path = FileSystems.getDefault().getPath("DomainData/marks.csv");
+
         List<MyBeanContainer> beanContainers = new ArrayList<>();
-        try {
-            beanContainers = new CsvToBeanBuilder<MyBeanContainer>(new CSVReader(Files.newBufferedReader(path)))
-                    .withType(MyBeanContainer.class).build().parse();
+
+        try (InputStream inputStream = getClass().getResourceAsStream("/marks.csv")) {
+            beanContainers = new CsvToBeanBuilder<MyBeanContainer>
+                    (new CSVReader(new BufferedReader(new InputStreamReader(inputStream))))
+                    .withType(MyBeanContainer.class)
+                    .build().parse();
             log.info("CSV file loaded successfully!");
         } catch (IOException e) {
-            System.out.println("Error reading csv file " + e.getMessage());
+            log.info("Error reading from CSV file...");
         }
         return beanContainers;
     }
